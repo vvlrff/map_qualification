@@ -4,6 +4,7 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    z-index: 900;
 }
 
 .menu-bars {
@@ -56,6 +57,7 @@
 
 .nav-menu-items {
     width: 100%;
+    padding-left: 0;
 }
 
 .navbar-toggle {
@@ -67,6 +69,6 @@
     align-items: center;
 }
 
-span {
+.span {
     margin-left: 16px;
 }

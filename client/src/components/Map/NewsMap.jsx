@@ -1,14 +1,20 @@
 import React from "react";
 import { MapContainer as Map, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./NewsMap.css";
+import "./NewsMap.scss";
 
 const NewsMap = ({ countries }) => {
-  const mapStyle = {
+  const countryStyle = {
     fillColor: "white",
     weight: 1,
     color: "black",
     fillOpacity: 1,
+  };
+
+  const mapStyle = {
+    height: "84vh",  
+    display: "flex", 
+    alignItems: "stretch"
   };
 
   const onEachCountry = (country, layer) => {
@@ -19,9 +25,12 @@ const NewsMap = ({ countries }) => {
   };
 
   return (
-    <Map style={{ height: "90vh" }} zoom={2} center={[10, 60]}>
+    <Map 
+      style={mapStyle} 
+      zoom={2} 
+      center={[10, 60]}>
       <GeoJSON
-        style={mapStyle}
+        style={countryStyle}
         data={countries}
         onEachFeature={onEachCountry}
       />
