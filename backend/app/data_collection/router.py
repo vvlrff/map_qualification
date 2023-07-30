@@ -31,7 +31,7 @@ async def get_news_guardian(session: AsyncSession = Depends(get_async_session)):
         if i['title'] not in answer:
             new_title = i['title']
             new_href = i['href']
-            new_date = datetime.today().strftime('%d-%m-%Y')
+            new_date = datetime.today()
 
             stmt = insert(news).values(
                 title=new_title,
@@ -61,7 +61,7 @@ async def get_countries_coordinates(session: AsyncSession = Depends(get_async_se
         if i['text'] not in answer:
             new_country = i['country']
             new_text = i['text']
-            new_date = datetime.today().strftime('%d-%m-%Y')
+            new_date = datetime.today()
 
             stmt = insert(country).values(
                 country=new_country,
