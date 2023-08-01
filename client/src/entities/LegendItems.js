@@ -1,22 +1,28 @@
 import LegendItem from "./LengendItem";
 
-var legendItems = [
+let legendItems = [
 
   new LegendItem(
-    "4+",
+    "8+",
     "#8b0000",
-    (cases) => cases > 4
+    (cases) => cases > 7
+  ),
+
+  new LegendItem(
+    "5-7",
+    "#9e2a2a",
+    (cases) => cases > 4 && cases <= 7
   ),
 
   new LegendItem(
     "2-4",
-    "#9e2a2a",
+    "#c57f7f",
     (cases) => cases >= 2 && cases <= 4
   ),
 
   new LegendItem(
     "1",
-    "#c57f7f",
+    "#ebd4d4",
     (cases) => cases === 1
   ),
 

@@ -28,7 +28,7 @@ const NewsMap = ({ countries }) => {
     <Map 
       style={mapStyle} 
       zoom={2} 
-      center={[10, 60]}>
+      center={[45, 0]}>
       <GeoJSON
         style={countryStyle}
         data={countries}

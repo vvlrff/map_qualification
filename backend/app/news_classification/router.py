@@ -1,3 +1,4 @@
+from operator import and_
 from fastapi import APIRouter, Depends
 from sqlalchemy import select, cast, TIMESTAMP
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,20 +34,17 @@ async def get_news_guardian(session: AsyncSession = Depends(get_async_session)):
 
     return answer
 
-@router.get("/news/{date}")
-async def get_news_by_date(date: str, session: AsyncSession = Depends(get_async_session)):
+
+@router.get("/news/{start_date}/{end_date}")
+async def get_news_by_date(start_date: str, end_date: str, session: AsyncSession = Depends(get_async_session)):
     # Преобразование строки даты в объект datetime
-    date_obj = datetime.strptime(date, "%d-%m-%Y")
-    
-    # Вычисление начальной и конечной даты для запроса
-    start_date = date_obj.replace(hour=0, minute=0, second=0)
+    start_date_obj = datetime.strptime(start_date, "%d-%m-%Y")
+    end_date_obj = datetime.strptime(end_date, "%d-%m-%Y")
 
-    end_date = datetime.today()
-    date_column = cast(news.c.date, TIMESTAMP)
+    end_date_obj = end_date_obj.replace(hour=23, minute=59, second=59)
 
-    
     # Создание запроса на выборку данных по дате
-    stmt = select(news).where(news.c.date.between(start_date, end_date))
+    stmt = select(news).where(and_(news.c.date >= start_date_obj, news.c.date <= end_date_obj))
     
     # Выполнение запроса и получение результатов
     result = await session.execute(stmt)
@@ -62,6 +60,8 @@ async def get_news_by_date(date: str, session: AsyncSession = Depends(get_async_
         })
 
     return answer
+
+
 
 
 @router.get("/countries_coordinates")
@@ -82,17 +82,16 @@ async def get_countries_coordinates(session: AsyncSession = Depends(get_async_se
 
     return answer
 
-@router.get("/countries_coordinates/{date}")
-async def get_news_by_date(date: str, session: AsyncSession = Depends(get_async_session)):
+@router.get("/countries_coordinates/{start_date}/{end_date}")
+async def get_news_by_date(start_date: str, end_date: str, session: AsyncSession = Depends(get_async_session)):
     # Преобразование строки даты в объект datetime
-    date_obj = datetime.strptime(date, "%d-%m-%Y")
-    
-    # Вычисление начальной и конечной даты для запроса
-    start_date = date_obj.replace(hour=0, minute=0, second=0)
-    end_date = start_date + timedelta(days=1)
+    start_date_obj = datetime.strptime(start_date, "%d-%m-%Y")
+    end_date_obj = datetime.strptime(end_date, "%d-%m-%Y")
+
+    end_date_obj = end_date_obj.replace(hour=23, minute=59, second=59)
     
     # Создание запроса на выборку данных по дате
-    stmt = select(country).where(country.c.date.between(start_date, end_date))
+    stmt = select(country).where(and_(country.c.date >= start_date_obj, country.c.date <= end_date_obj))
     
     # Выполнение запроса и получение результатов
     result = await session.execute(stmt)
