@@ -8,7 +8,6 @@ const DataPage = () => {
     axios
       .get(`http://127.0.0.1:8000/classification/news_guardian`)
       .then(res => {
-        console.log(res.data)
         setData(res.data)
       })
       .catch(err => {
