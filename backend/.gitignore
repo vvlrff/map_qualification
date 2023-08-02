@@ -5,3 +5,5 @@ venv
 /venv/bin
 /venv/bin/*
 venv/
+venv/
+backend/venv
