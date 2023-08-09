@@ -2,12 +2,15 @@ version: "3.7"
 services:
   db:
     image: postgres:15
-    container_name: db_app
+    container_name: db
     command: -p 1221
     expose:
       - 1221
     env_file:
       - .env-non-dev
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
 
   app:
     build:
@@ -20,3 +23,6 @@ services:
       - 8000:8000
     depends_on:
       - db
+
+volumes:
+  db_data:
