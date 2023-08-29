@@ -1,11 +1,28 @@
 .container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 15px;
     grid-row-gap: 1em;
+    margin-left: 20px;
 }
 
 .item {
-    border: 2px;
+    width: 20vw;
+    height: 27vh;
     border-radius: 10px;
+    background-color: #6e6868;
+    color: #ffffff;
+    padding: 10px;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.link {
+    margin: 20px;
+    text-decoration: none;
 }

@@ -21,7 +21,7 @@ const NewsMap = ({ countries }) => {
     layer.options.fillColor = country.properties.color;
     const name = country.properties.ADMIN;
     const text = country.properties.text;
-    layer.bindPopup(`<div>${name}</div> <div>${text}</div>`);
+    layer.bindPopup(`<div style=“font-weight: bold;”>${name}</div> <div>${text}</div>`);
   };
 
   return (

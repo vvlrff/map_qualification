@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <div className={s.container}>
-      <Link to="/data">
+      <Link to="/data" className={s.link}>
         <div className={s['left-block']}>
           <div className={s.text}>
             Просмотреть все данные
@@ -27,7 +27,7 @@ const HomePage = () => {
         </div>
       </Link>
 
-      <Link to="/map">
+      <Link to="/map" className={s.link}>
         <div className={s['right-block']}>
           <div className={s.text}>
             Карта
@@ -36,7 +36,7 @@ const HomePage = () => {
         </div>
       </Link>
 
-      <Link to="/calendar">
+      <Link to="/calendar" className={s.link}>
         <div className={s['lower-block']}>
           <div className={s.text}>
             Данные по временному промежутку
