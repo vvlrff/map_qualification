@@ -7,7 +7,8 @@ import DataPage from './pages/DataPage';
 import MapPage from './pages/MapPage';
 import IdPage from './pages/IdPage';
 import NotFoundPage from './pages/NotFoundPage';
-
+import CalendarPage from './pages/CalendarPage';
+import CalendarDataPage from './pages/CalendarDataPage';
 
 
 const router = createBrowserRouter(createRoutesFromElements(
@@ -15,6 +16,8 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<HomePage />} />
     <Route path='map' element={<MapPage />} />
     <Route path='data' element={<DataPage />} />
+    <Route path='calendar' element={<CalendarPage />} />
+    <Route path='calendar/data' element={<CalendarDataPage />} />
     <Route path='data/:id' element={<IdPage />} />
     <Route path='*' element={<NotFoundPage />} />
   </Route>
