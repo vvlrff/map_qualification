@@ -19,7 +19,7 @@ const MapPage = () => {
   return (
     <>
       <button className={s.button1} onClick={collectData}>Собрать данные</button>
-      <button className={s.button} onClick={() => navigate(-1)}>Вернуться назад</button>
+      <button className={s.button} onClick={() => navigate('/')}>Вернуться назад</button>
       <MyMap />
     </>
   )
