@@ -76,7 +76,6 @@ tzdata==2023.3
 ujson==5.8.0
 urllib3==2.0.4
 uvicorn==0.23.2
-uvloop==0.17.0
 wasabi==1.1.2
 watchfiles==0.19.0
 websockets==11.0.3
