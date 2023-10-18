@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from "react";
-
+import { useState, useEffect } from "react";
 import Loading from "./Loading";
 import NewsMap from "./NewsMap";
 import LoadCountriesTask from "../../tasks/LoadCountriesTask";
 import Legend from "./Legend";
-import legendItems from "../../entities/LegendItems";
 
 const MyMap = () => {
-  const [countries, setCountries] = useState([]);
-
-  const legendItemsReverse = [...legendItems].reverse();
+  const [countries, setCountries] = useState<any>([]);
 
   const load = () => {
     const loadCountriesTask = new LoadCountriesTask();
-    loadCountriesTask.load((countries) => setCountries(countries));
+    loadCountriesTask.load((countries: any) => setCountries(countries));
   };
 
   useEffect(load, [countries]);
   console.log(countries)
+
   return (
     <div>
       {countries.length === 0 ? (
@@ -25,7 +22,7 @@ const MyMap = () => {
       ) : (
         <div>
           <NewsMap countries={countries} />
-          <Legend legendItems={legendItemsReverse} />
+          <Legend />
         </div>
       )}
     </div>

@@ -1,5 +1,9 @@
 class LegendItem {
-  constructor(title, color, isFor, textColor) {
+  title: string;
+  color: string;
+  isFor: any;
+  textColor?: null | undefined;
+  constructor(title: string, color: string, isFor: any , textColor: null | undefined) {
     this.title = title;
     this.color = color;
     this.isFor = isFor;
@@ -8,3 +12,4 @@ class LegendItem {
 }
 
 export default LegendItem;
+

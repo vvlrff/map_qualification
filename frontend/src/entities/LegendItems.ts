@@ -5,31 +5,36 @@ let legendItems = [
   new LegendItem(
     "8+",
     "#8b0000",
-    (cases) => cases > 7
+    (cases: number) => cases > 7,
+    null
   ),
 
   new LegendItem(
     "5-7",
     "#9e2a2a",
-    (cases) => cases > 4 && cases <= 7
+    (cases: number) => cases > 4 && cases <= 7,
+    null
   ),
 
   new LegendItem(
     "2-4",
     "#c57f7f",
-    (cases) => cases >= 2 && cases <= 4
+    (cases: number) => cases >= 2 && cases <= 4,
+    null
   ),
 
   new LegendItem(
     "1",
     "#ebd4d4",
-    (cases) => cases === 1
+    (cases: number) => cases === 1,
+    null
   ),
 
   new LegendItem(
     "0", 
     "#ffffff", 
-    (cases) => cases === 0
+    (cases: number) => cases === 0,
+    null
   ),
 ];
 

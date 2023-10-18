@@ -1,6 +1,6 @@
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
 import Layout from "./components/Layout";
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePage/HomePage';
 import DataPage from './pages/DataPage/DataPage';
 import MapPage from './pages/MapPage/MapPage';
 import IdPage from './pages/IdPage/IdPage';

@@ -13,16 +13,13 @@ const CalendarPage = () => {
 
   return (
     <div className={s.container}>
-      {state.response.map((item, index) => {
+      {state.response.map((item: any) => {
         return (
           <Link to={`/data/${item.id}`} className={s.link}>
-            <div key={index} className={s.item}>
+            <div key={item.title} className={s.item}>
               <div className={s.title}>
                 {item.title}
               </div>
-              {/* <div>
-                Ссылка: {item.href}
-              </div> */}
               <div>
                 Дата: {dayjs(item.date).format('DD-MM-YYYY')}
               </div>

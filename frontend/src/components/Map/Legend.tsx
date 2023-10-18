@@ -1,4 +1,6 @@
-const Legend = ({ legendItems }) => {
+import legendItems from "../../entities/LegendItems"; 
+
+const Legend = () => {
   return (
     <div
       style={{

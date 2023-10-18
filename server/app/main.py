@@ -15,7 +15,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "http://localhost:3001",
+    "http://localhost:5173",
 ]
 
 
@@ -23,9 +23,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-                   "Authorization"],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin", "Authorization"],
 )
 
 app.include_router(

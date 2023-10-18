@@ -14,31 +14,39 @@ export const newsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    collectNews: builder.query<INews[], string>({
+      query: () => ({
+        url: `/collection/collect_news`,
+      })
+    }),
     getAllNews: builder.query<INews[], string>({
-      query: (param) => ({
-        url: `/api/test_${param}`,
+      query: () => ({
+        url: `/get/news_guardian`,
       })
     }),
-    getNews: builder.query<INews, number>({
+    getNewsById: builder.query<INews, number>({
       query: (id) => ({
-        url: `/api/test/${id}`,
+        url: `/get/news_guardian/${id}`,
       })
     }),
-    postAllNews: builder.mutation<INews[], { param: string, request: string }>({
-      query: ({ param, request }) => ({
-        url: `/search/test_message_date_${param}`,
-        method: "POST",
-        body: request
+    getNewsByDate: builder.query<INews[], { start_date: string, end_date: string }>({
+      query: ({ start_date, end_date }) => ({
+        url: `/get/news_guardian_start_date=${start_date}_end_date=${end_date}`,
       })
     }),
-    postAllNewsMessage: builder.mutation<INews[], { param: string, message: string}>({
-      query: ({param, message}) => ({
-        url: `/search/test_message_${param}`,
-        method: "POST",
-        body: {message: message}
+    deleteAllNews: builder.mutation<any, number>({
+      query: () => ({
+        url: `/delete/news`,
+        method: "DELETE",
+      })
+    }),
+    deleteNewsById: builder.mutation<any, number>({
+      query: (id) => ({
+        url: `/delete/news/${id}`,
+        method: "DELETE",
       })
     }),
   }),
 });
 
-export const { useGetAllNewsQuery, useGetNewsQuery, usePostAllNewsMessageMutation, usePostAllNewsMutation } = newsApi;
+export const { useCollectNewsQuery, useGetAllNewsQuery, useGetNewsByIdQuery, useGetNewsByDateQuery, useDeleteAllNewsMutation, useDeleteNewsByIdMutation } = newsApi;

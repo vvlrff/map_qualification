@@ -7,13 +7,13 @@
     z-index: 900;
 }
 
-.menu-bars {
+.menu_bars {
     margin-left: 2rem;
     font-size: 2rem;
     background: none;
 }
 
-.nav-menu {
+.nav_menu {
     background-color: #060b26;
     width: 250px;
     height: 100vh;
@@ -25,12 +25,12 @@
     transition: 850ms;
 }
 
-.nav-menu.active {
+.nav_menu.active {
     left: 0;
     transition: 350ms;
 }
 
-.nav-text {
+.nav_text {
     display: flex;
     justify-content: start;
     align-items: center;
@@ -39,7 +39,7 @@
     height: 60px;
 }
 
-.nav-text a {
+.nav_text a {
     text-decoration: none;
     color: #f5f5f5;
     font-size: 18px;
@@ -51,16 +51,16 @@
     border-radius: 4px;
 }
 
-.nav-text a:hover {
+.nav_text a:hover {
     background-color: #1a83ff;
 }
 
-.nav-menu-items {
+.nav_menu_items {
     width: 100%;
     padding-left: 0;
 }
 
-.navbar-toggle {
+.navbar_toggle {
     background-color: #060b26;
     width: 100%;
     height: 80px;

@@ -1,44 +1,64 @@
 import legendItems from "../entities/LegendItems";
 import countriesData from "../data/countries.json";
+import { INews } from "../models/INews";
 
+interface CountryData {
+  type: string;
+  features: CountryFeature[];
+}
+
+interface CountryFeature {
+  type: string;
+  properties: {
+    color: string;
+    text: string[];
+    ADMIN: string;
+    ISO_A3: string;
+  };
+  geometry: {
+    type: string;
+    coordinates: number[][][];
+  };
+}
 class LoadCountryTask {
-  url = "http://127.0.0.1:8000/classification/countries_coordinates";
+  url = "http://127.0.0.1:8000/get/news_guardian";
+  setState: any = null;
 
-  setState = null;
-  
-
-  load = async (setState) => {
+  load = async (setState: any) => {
     this.setState = setState;
 
     let response = await fetch(this.url);
 
-    let data = await response.json();
+    let data: INews[] = await response.json();
 
-    this.processData(data)
-
+    this.processData(data);
   };
 
-  processData = (newsCountries) => {
-    console.log(newsCountries);
-    for (let i = 0; i < countriesData.features.length; i++) {
-      const country = countriesData.features[i];
+  processData = (newsCountries: INews[]) => {
+    console.log("newsCountries", newsCountries);
+    for (let i = 0; i < (countriesData as CountryData).features.length; i++) {
+      const country = (countriesData as CountryData).features[i];
 
-      let textData = [];
+      let textData: string[] = [];
 
       for (let j = 0; j < newsCountries.length; j++) {
-        if (newsCountries[j].country === country.properties.ADMIN) {
-          textData.push(newsCountries[j].text)
+        if (newsCountries[j].country.includes(country.properties.ADMIN)) {
+          textData.push(newsCountries[j].title);
         }
       }
-      
+
       country.properties.text = textData;
+      if (country.properties.ADMIN == "United States of America"){
+        console.log(country)
+      }  
+      
 
       this.setCountryColor(country);
     }
-    this.setState(countriesData.features);
+    this.setState((countriesData as CountryData).features);
   };
 
-  setCountryColor = (country) => {
+  setCountryColor = (country: CountryFeature) => {
     const legendItem = legendItems.find((item) =>
       item.isFor(country.properties.text.length)
     );

@@ -7,7 +7,7 @@
     grid-template-rows: repeat(2, auto);
 }
 
-.left-block {
+.left_block {
     display: flex;
     background-color: #6bd0e2;
     height: 40vh;
@@ -21,7 +21,7 @@
     text-decoration: none;
 }
 
-.right-block {
+.right_block {
     display: flex;
     background-color: #e7d257;
     height: 40vh;
@@ -35,7 +35,7 @@
     text-decoration: none;
 }
 
-.lower-block {
+.lower_block {
     display: flex;
     background-color: #6e6868;
     height: 40vh;
