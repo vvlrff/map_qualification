@@ -1,0 +1,101 @@
+$main-color: #071923;
+$secondary-color: #acfbff;
+$third-color: #f3fcff;
+$fourth-color: #3097c4;
+
+$pc-header: 64px;
+$pc-caption: 32px;
+$pc-padding: 50px;
+$pc-global-padding: 0 100px;
+
+$nav-padding: 35px;
+
+$block-border-radius: 32px;
+
+@mixin mainHeader {
+    font-weight: 700;
+    font-size: $pc-header;
+    line-height: 64px;
+}
+
+@mixin mainCaption {
+    font-weight: 700;
+    font-size: $pc-caption;
+    line-height: 64px;
+}
+
+@mixin mainButton {
+    padding: 12px 24px;
+    color: $third-color;
+    background-color: $main-color;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+@mixin container {
+    position: relative;
+    padding: $pc-padding;
+    width: 50%;
+    border: 3px solid $main-color;
+    border-radius: $block-border-radius;
+    box-shadow: -4px -4px 4px 4px $fourth-color;
+
+    &:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: $block-border-radius;
+        box-shadow: 8px 8px 12px 8px $main-color;
+        z-index: -1;
+    }
+}
+
+@mixin blockText {
+    margin-top: 32px;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+@mixin animatedButton {
+    position: relative;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+    &:hover {
+        background-color: $fourth-color;
+        border-color: black;
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        z-index: -1;
+        transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    }
+
+    &:before {
+        background-color: $fourth-color;
+        transform: translate(-10px, -10px);
+    }
+
+    &:after {
+        background-color: #fff;
+        border: 1px solid black;
+        transform: translate(10px, 10px);
+    }
+
+    &:hover:before,
+    &:hover:after {
+        transform: translate(0);
+        border-color: transparent;
+    }
+}

@@ -1,12 +1,12 @@
 from datetime import datetime
-# from asyncpg import UniqueViolationError
 from fastapi import APIRouter, Depends, status
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app.elastic import elastic_client
 from app.database import get_async_session
 from app.data_collection.models import news
 from app.data_collection.services import dangerous_news_guardian
+
 
 router = APIRouter(
     prefix="/collection",
@@ -42,6 +42,17 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
             )
             await session.execute(stmt)
             await session.commit()
+
+            document = {
+                'title': news_title,
+                'href': news_href,
+                'country': news_country,
+                'city': news_city,
+                'image': news_image,
+                'date': datetime.today().isoformat()
+            }
+        
+            await elastic_client.index(index='news', document=document)
 
     return {
         "status": status.HTTP_200_OK,
