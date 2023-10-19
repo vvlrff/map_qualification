@@ -12,20 +12,22 @@ const MyMap = () => {
     loadCountriesTask.load((countries: any) => setCountries(countries));
   };
 
-  useEffect(load, [countries]);
+  useEffect(() => {
+    setTimeout(load, 2)
+  }, [countries]);
   console.log(countries)
 
   return (
-    <div>
+    <>
       {countries.length === 0 ? (
         <Loading />
       ) : (
-        <div>
+        <>
           <NewsMap countries={countries} />
           <Legend />
-        </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 

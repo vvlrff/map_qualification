@@ -1,18 +1,16 @@
 import LegendItem from "./LengendItem";
 
 let legendItems = [
-
   new LegendItem(
-    "8+",
-    "#8b0000",
-    (cases: number) => cases > 7,
+    "0",
+    "#ffffff",
+    (cases: number) => cases === 0,
     null
   ),
-
   new LegendItem(
-    "5-7",
-    "#9e2a2a",
-    (cases: number) => cases > 4 && cases <= 7,
+    "1",
+    "#ebd4d4",
+    (cases: number) => cases === 1,
     null
   ),
 
@@ -24,16 +22,15 @@ let legendItems = [
   ),
 
   new LegendItem(
-    "1",
-    "#ebd4d4",
-    (cases: number) => cases === 1,
+    "5-7",
+    "#9e2a2a",
+    (cases: number) => cases > 4 && cases <= 7,
     null
   ),
-
   new LegendItem(
-    "0", 
-    "#ffffff", 
-    (cases: number) => cases === 0,
+    "8+",
+    "#8b0000",
+    (cases: number) => cases > 7,
     null
   ),
 ];

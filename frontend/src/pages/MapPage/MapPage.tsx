@@ -1,15 +1,33 @@
-import { useNavigate } from 'react-router-dom'
+import dayjs from 'dayjs';
 import MyMap from '../../components/Map/MyMap'
+import { newsApi } from '../../services/newsApi';
 import s from "./MapPage.module.scss"
 
 const MapPage = () => {
-  const navigate = useNavigate()
+  const {
+    data: news,
+  } = newsApi.useGetAllNewsQuery('');
 
   return (
-    <>
-      <button className={s.button} onClick={() => navigate('/')}>Вернуться назад</button>
-      <MyMap />
-    </>
+    <div className={s.container}>
+      <div className={s.sidebar}>
+        {news?.map((item) => {
+          return (
+            <div key={item.id} className={s.item}>
+              <div className={s.title}>
+                {item.title}
+              </div>
+              <div>
+                Дата: {dayjs(item.date).format('DD-MM-YYYY')}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className={s.map}>
+        <MyMap />
+      </div>
+    </div>
   )
 }
 

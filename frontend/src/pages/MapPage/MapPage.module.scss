@@ -1,21 +1,30 @@
-.button {
-    position: fixed;
-    margin-left: 85vw;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #1a83ff;
-    color: #f5f5f5;
-    margin-top: -7vh;
-    border: none;
+.container {
+    display: flex;
+    height: calc(100vh - 80px);
+    width: 100vw;
 }
 
-.button1 {
-    position: fixed;
-    margin-left: 70vw;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #1a83ff;
-    color: #f5f5f5;
-    margin-top: -7vh;
-    border: none;
+.sidebar {
+    width: 30vw;
+    max-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.map {
+    width: 70vw;
+}
+
+.item {
+    background-color: #1c1b53;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    color: #ffffff;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
 }

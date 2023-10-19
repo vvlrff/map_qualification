@@ -24,7 +24,7 @@ const NewsMap: React.FC<NewsMapProps> = ({ countries }) => {
   };
 
   const mapStyle: React.CSSProperties = {
-    height: "84vh",
+    height: "calc(90vh - 80px)",
     display: "flex",
     alignItems: "stretch",
   };

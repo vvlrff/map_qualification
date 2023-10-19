@@ -20,6 +20,7 @@ interface CountryFeature {
     coordinates: number[][][];
   };
 }
+
 class LoadCountryTask {
   url = "http://127.0.0.1:8000/get/news_guardian";
   setState: any = null;
@@ -48,10 +49,10 @@ class LoadCountryTask {
       }
 
       country.properties.text = textData;
-      if (country.properties.ADMIN == "United States of America"){
+      if (country.properties.ADMIN == "United States of America") {
         console.log(country)
-      }  
-      
+      }
+
 
       this.setCountryColor(country);
     }

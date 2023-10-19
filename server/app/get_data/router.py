@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
-
 from app.database import get_async_session
 from app.data_collection.models import news
 
@@ -45,7 +44,7 @@ async def get_news_guardian_by_id(news_id: int, session: AsyncSession = Depends(
     return data
 
 
-@router.get("/news_guardian_start_date={start_date}_end_date={end_date}")
+@router.get("/news_guardian_{start_date}_{end_date}")
 async def get_news_guardian_by_dates(start_date: str, end_date: str, session: AsyncSession = Depends(get_async_session)):
 
     start_date_obj = datetime.strptime(start_date, "%d-%m-%Y")
