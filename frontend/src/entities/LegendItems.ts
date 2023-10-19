@@ -1,12 +1,15 @@
 import LegendItem from "./LengendItem";
 
+
 let legendItems = [
+
   new LegendItem(
     "0",
     "#ffffff",
     (cases: number) => cases === 0,
     null
   ),
+
   new LegendItem(
     "1",
     "#ebd4d4",
@@ -27,6 +30,7 @@ let legendItems = [
     (cases: number) => cases > 4 && cases <= 7,
     null
   ),
+
   new LegendItem(
     "8+",
     "#8b0000",
