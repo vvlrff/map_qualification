@@ -7,9 +7,12 @@ news = Table(
     "news",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("title", String, unique=True),
+    Column("title_en", String, unique=True),
+    Column("title_ru", String, unique=True),
     Column("href", String),
     Column("image", String),
+    Column("image_text_en", String),
+    Column("image_text_ru", String),
     Column("country", ARRAY(String)),
     Column("city", ARRAY(String)),
     Column("date", TIMESTAMP, default=datetime.today().strftime('%d-%m-%Y'))

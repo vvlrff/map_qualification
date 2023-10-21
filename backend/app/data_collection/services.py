@@ -1,4 +1,7 @@
+import requests
 from app.data_collection.scrapper import get_news_theguardian
+from transformers import MarianMTModel, MarianTokenizer, BlipProcessor, BlipForConditionalGeneration
+from PIL import Image
 import pandas as pd
 import spacy
 import numpy as np
@@ -11,6 +14,14 @@ gc = geonamescache.GeonamesCache()
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 model_pickle_path = os.path.join(current_directory, 'model_pickle')
+
+model_name_translator = "Helsinki-NLP/opus-mt-en-ru"
+model_translator = MarianMTModel.from_pretrained(model_name_translator)
+tokenizer_translator = MarianTokenizer.from_pretrained(model_name_translator)
+
+model_name_img_text = "Salesforce/blip-image-captioning-large"
+model_img_text = BlipForConditionalGeneration.from_pretrained(model_name_img_text)
+processor_img_text = BlipProcessor.from_pretrained(model_name_img_text)
 
 
 def dangerous_news_guardian():
@@ -65,12 +76,50 @@ def dangerous_news_guardian():
     items = []
 
     for title, image, href in zip(need_list, image_list, url_list):
+        text_to_translate = title
+        inputs = tokenizer_translator.encode(text_to_translate, return_tensors="pt")
+        translated = model_translator.generate(inputs)
+        translation = tokenizer_translator.decode(translated[0], skip_special_tokens=True)
+
+        
+        file_name = os.path.basename(image.split("?")[0])  # Имя файла без параметров запроса
+        save_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'photos', file_name))
+
+        response = requests.get(image)
+
+        if response.status_code == 200:
+            # Сохраняем изображение в файл
+            with open(save_path, "wb") as file:
+                file.write(response.content)
+            print(f"Изображение успешно загружено и сохранено как {file_name} в папку 'photos'.")
+        else:
+            print("Не удалось загрузить изображение. Проверьте URL.")
+
+
+
+        # Путь к изображению, которое нужно описать
+        image_path = save_path 
+
+        image_ = Image.open(image_path)
+        image_bytes = processor_img_text(images=image_, return_tensors="pt").pixel_values
+        caption = model_img_text.generate(image_bytes)
+        caption_text = processor_img_text.decode(caption[0], skip_special_tokens=True)
+
+        text_to_translate_img = caption_text
+        inputs_img = tokenizer_translator.encode(text_to_translate_img, return_tensors="pt")
+        translated_img = model_translator.generate(inputs_img)
+        translation_img = tokenizer_translator.decode(translated_img[0], skip_special_tokens=True)
+
         item = {
-            "title": title,
+            "title_en": title,
+            "title_ru": translation,
             "id": len(items),
             "href": href,
-            "image": image,
+            "image": save_path,
+            "image_text_en": caption_text,
+            "image_text_ru": translation_img,
         }
+
         doc = nlp(title)
         found_countries = []
         found_cities = []
@@ -92,5 +141,6 @@ def dangerous_news_guardian():
         item["country"] = found_countries
         item["city"] = found_cities
         items.append(item)
+        print(f"item{id}: {item}")
     
     return items

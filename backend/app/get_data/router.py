@@ -24,14 +24,18 @@ async def get_all_news_guardian(session: AsyncSession = Depends(get_async_sessio
     for i in data:
         answer.append({
             'id': i[0],
-            'title': i[1],
-            'href': i[2],
-            'image': i[3],
-            'country': i[4],
-            'city': i[5],
-            'date': i[6],
+            'title_en': i[1],
+            'title_ru': i[2],
+            'href': i[3],
+            'image': i[4],
+            'image_text_ru': i[5],
+            'image_text_en': i[6],
+            'country': i[7],
+            'city': i[8],
+            'date': i[9],
         })
     return answer
+
 
 @router.get("/news_guardian/{news_id}")
 async def get_news_guardian_by_id(news_id: int, session: AsyncSession = Depends(get_async_session)):
@@ -61,14 +65,15 @@ async def get_news_guardian_by_dates(start_date: str, end_date: str, session: As
     for i in data:
         answer.append({
             'id': i[0],
-            'title': i[1],
-            'href': i[2],
-            'image': i[3],
-            'country': i[4],
-            'city': i[5],
-            'date': i[6],
+            'title_en': i[1],
+            'title_ru': i[2],
+            'href': i[3],
+            'image': i[4],
+            'image_text_ru': i[5],
+            'image_text_en': i[6],
+            'country': i[7],
+            'city': i[8],
+            'date': i[9],
         })
 
     return answer
-
-

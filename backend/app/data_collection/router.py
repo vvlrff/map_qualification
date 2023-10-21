@@ -20,41 +20,46 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
     data = dangerous_news_guardian()
 
     for i in data:
-        news_title = i["title"]
+        news_title_en = i["title_en"]
+        news_title_ru = i["title_ru"]
         news_href = i["href"]
         news_country = i["country"]
         news_city = i["city"]
         news_image = i["image"]
+        news_image_text_en = i["image_text_en"]
+        news_image_text_ru = i["image_text_ru"]
         news_date = datetime.today()
 
-        query = select(news).where(news.c.title == news_title)
+        query = select(news).where(news.c.title_en == news_title_en)
         existing_entry = await session.execute(query)
         existing_entry = existing_entry.fetchone()
 
         if existing_entry is None:
             stmt = insert(news).values(
-                title=news_title,
+                title_en=news_title_en,
+                title_ru=news_title_ru,
                 href=news_href,
                 date=news_date,
                 city=news_city,
                 country=news_country,
-                image=news_image
+                image=news_image,
+                image_text_en=news_image_text_en,
+                image_text_ru=news_image_text_ru,
             )
             await session.execute(stmt)
             await session.commit()
 
             document = {
-                'title': news_title,
+                'title_en': news_title_en,
+                'title_ru': news_title_ru,
                 'href': news_href,
                 'country': news_country,
                 'city': news_city,
                 'image': news_image,
+                'image_text_en': news_image_text_en,
+                'image_text_ru': news_image_text_ru,
                 'date': datetime.today().isoformat()
             }
-        
             await elastic_client.index(index='news', document=document)
 
-    return {
-        "status": status.HTTP_200_OK,
-        "data": data
-    }
+    return {"status": status.HTTP_200_OK, "data": data}

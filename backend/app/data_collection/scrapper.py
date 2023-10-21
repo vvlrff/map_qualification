@@ -21,6 +21,7 @@ def get_news_theguardian():
             itemText = allText[i].text
             itemHref = allHrefs[i].get('href')
             itemImage = allImage[i].get('src')
+
             fullHref = "https://www.theguardian.com" + str(itemHref)
             items.append(
                 {
