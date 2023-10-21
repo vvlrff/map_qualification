@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.elastic import elastic_client
 from app.database import get_async_session
 from app.data_collection.models import news
+from app.elasticsearch.schemas import InputUserMessage
 
 router = APIRouter(
     prefix="/elasticsearch",
@@ -65,8 +66,8 @@ async def get_elastic_data():
     return {"status": status.HTTP_200_OK, "result": search_results}
 
 
-@router.get("/search_{search}")
-async def search_by_title(search: str):
+@router.post("/search")
+async def search_by_title(search: InputUserMessage):
     try:
         search_params_en = {
             "query": {
@@ -75,7 +76,7 @@ async def search_by_title(search: str):
                         {
                             "match": {
                                 "title_en": {
-                                    "query": search,
+                                    "query": search.message,
                                     "operator": "and",
                                     "fuzziness": 'AUTO'
                                 }
@@ -95,7 +96,7 @@ async def search_by_title(search: str):
                         {
                             "match": {
                                 "title_ru": {
-                                    "query": search,
+                                    "query": search.message,
                                     "operator": "and",
                                     "fuzziness": 'AUTO'
                                 }

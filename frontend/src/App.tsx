@@ -14,9 +14,9 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<HomePage />} />
     <Route path='map' element={<MapPage />} />
     <Route path='data' element={<DataPage />} />
+    <Route path='data/:id' element={<IdPage />} />
     <Route path='calendar' element={<CalendarPage />} />
     <Route path='calendar/data' element={<CalendarDataPage />} />
-    <Route path='data/:id' element={<IdPage />} />
     <Route path='*' element={<NotFoundPage />} />
   </Route>
 ))

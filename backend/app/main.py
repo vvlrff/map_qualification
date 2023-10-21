@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.auth.schemas import UserRead, UserCreate
 from app.auth.base_config import auth_backend, fastapi_users
 from app.data_collection.router import router as router_collect
@@ -17,6 +18,7 @@ origins = [
     "http://localhost:5173",
 ]
 
+app.mount("/photos", StaticFiles(directory=r"app\photos"), name="photos")
 
 app.add_middleware(
     CORSMiddleware,

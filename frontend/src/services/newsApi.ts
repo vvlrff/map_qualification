@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { INews } from "../models/INews";
 
+
 export const newsApi = createApi({
   reducerPath: "newsApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://127.0.0.1:8000",
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       const token = JSON.parse(localStorage.getItem('user') || '{}')?.access_token;
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
@@ -31,7 +32,7 @@ export const newsApi = createApi({
     }),
     getNewsByDate: builder.query<INews[], { start_date: string, end_date: string }>({
       query: ({ start_date, end_date }) => ({
-        url: `/get/news_guardian_start_date=${start_date}_end_date=${end_date}`,
+        url: `/get/news_guardian_${start_date}_${end_date}`,
       })
     }),
     deleteAllNews: builder.mutation<any, number>({

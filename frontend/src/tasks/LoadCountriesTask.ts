@@ -44,7 +44,7 @@ class LoadCountryTask {
 
       for (let j = 0; j < newsCountries.length; j++) {
         if (newsCountries[j].country.includes(country.properties.ADMIN)) {
-          textData.push(newsCountries[j].title);
+          textData.push(newsCountries[j].title_ru);
         }
       }
 

@@ -15,7 +15,7 @@ const MapPage = () => {
           return (
             <div key={item.id} className={s.item}>
               <div className={s.title}>
-                {item.title}
+                {item.title_ru}
               </div>
               <div>
                 Дата: {dayjs(item.date).format('DD-MM-YYYY')}
