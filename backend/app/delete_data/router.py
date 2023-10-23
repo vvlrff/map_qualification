@@ -19,7 +19,7 @@ async def delete_news_by_id(news_id: int, session: AsyncSession = Depends(get_as
     await session.execute(stmt)
     await session.commit()
     
-    return {"message": f"Новость с id={news_id} удалена успешно"}
+    return {"message": f"Новость {news_id} удалена успешно"}
 
 @router.delete("/news")
 async def delete_all_news(session: AsyncSession = Depends(get_async_session)):

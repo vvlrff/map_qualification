@@ -5,13 +5,9 @@
     margin: 20px;
 }
 
-.searchInput {
+.searchInput {}
 
-}
-
-.button {
-
-}
+.button {}
 
 .dateContainer {
     display: flex;
@@ -26,25 +22,46 @@
     grid-column-gap: 15px;
     grid-row-gap: 1em;
     margin-left: 20px;
+    transition: transform 0.3s ease;
+
+    .item:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
 }
 
 .item {
-    height: 40vh;
+    position: relative;
+    height: 50vh;
     border-radius: 10px;
     background-color: #6e6868;
     color: #ffffff;
     padding: 20px;
     overflow: hidden;
     text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .img {
-
+    height: 20vh;
 }
 
 .title {
     font-weight: bold;
     font-size: 24px;
+}
+
+.date {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
 }
 
 .link {

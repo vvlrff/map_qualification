@@ -43,7 +43,7 @@ const DataPage = () => {
   };
 
   const sendData = async () => {
-    await elasticMessageDate({message, firstValue, secondValue})
+    await elasticMessageDate({ message, firstValue, secondValue })
   };
 
   return (
@@ -90,9 +90,11 @@ const DataPage = () => {
               return (
                 <Link to={`/data/${item.id}`} className={s.link}>
                   <div key={item.id} className={s.item}>
-                    <img src={item.image} alt="img" />
+                    <div className={s.imgContainer}>
+                      <img className={s.img} src={item.image} alt="img" />
+                    </div>
                     <div className={s.title}>{item.title_ru}</div>
-                    <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
+                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
                   </div>
                 </Link>
               )
@@ -106,9 +108,11 @@ const DataPage = () => {
               return (
                 <Link to={`/data/${item.id}`} className={s.link}>
                   <div key={item.id} className={s.item}>
-                    <img className={s.img} src={item.image} alt="img" />
+                    <div className={s.imgContainer}>
+                      <img className={s.img} src={item.image} alt="img" />
+                    </div>
                     <div className={s.title}>{item.title_ru}</div>
-                    <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
+                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
                   </div>
                 </Link>
               )
@@ -122,9 +126,11 @@ const DataPage = () => {
               return (
                 <Link to={`/data/${item.id}`} className={s.link}>
                   <div key={item.id} className={s.item}>
-                    <img className={s.img} src={item.image} alt="img" />
+                    <div className={s.imgContainer}>
+                      <img className={s.img} src={item.image} alt="img" />
+                    </div>
                     <div className={s.title}>{item.title_ru}</div>
-                    <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
+                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
                   </div>
                 </Link>
               )

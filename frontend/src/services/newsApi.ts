@@ -15,9 +15,10 @@ export const newsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    collectNews: builder.query<INews[], string>({
+    collectNews: builder.mutation<INews[], string>({
       query: () => ({
         url: `/collection/collect_news`,
+        method: "POST",
       })
     }),
     getAllNews: builder.query<INews[], string>({
@@ -50,4 +51,4 @@ export const newsApi = createApi({
   }),
 });
 
-export const { useCollectNewsQuery, useGetAllNewsQuery, useGetNewsByIdQuery, useGetNewsByDateQuery, useDeleteAllNewsMutation, useDeleteNewsByIdMutation } = newsApi;
+export const { useCollectNewsMutation, useGetAllNewsQuery, useGetNewsByIdQuery, useGetNewsByDateQuery, useDeleteAllNewsMutation, useDeleteNewsByIdMutation } = newsApi;

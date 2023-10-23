@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.get("/collect_news")
+@router.post("/collect_news")
 async def collect_news_guardian(session: AsyncSession = Depends(get_async_session)):
 
     data = dangerous_news_guardian()

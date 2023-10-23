@@ -81,23 +81,18 @@ def dangerous_news_guardian():
         translated = model_translator.generate(inputs)
         translation = tokenizer_translator.decode(translated[0], skip_special_tokens=True)
 
-        
-        file_name = os.path.basename(image.split("?")[0])  # Имя файла без параметров запроса
+        file_name = os.path.basename(image.split("?")[0]) 
         save_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'photos', file_name))
 
         response = requests.get(image)
 
         if response.status_code == 200:
-            # Сохраняем изображение в файл
             with open(save_path, "wb") as file:
                 file.write(response.content)
-            print(f"Изображение успешно загружено и сохранено как {file_name} в папку 'photos'.")
+            print(f"Изображение {file_name} успешно загружено")
         else:
-            print("Не удалось загрузить изображение. Проверьте URL.")
+            print(f"Ошибка {file_name}")
 
-
-
-        # Путь к изображению, которое нужно описать
         image_path = save_path 
 
         image_ = Image.open(image_path)
