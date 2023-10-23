@@ -110,12 +110,14 @@ def dangerous_news_guardian():
         translated_img = model_translator.generate(inputs_img)
         translation_img = tokenizer_translator.decode(translated_img[0], skip_special_tokens=True)
 
+        new_string = save_path.split("\\")
+
         item = {
             "title_en": title,
             "title_ru": translation,
             "id": len(items),
             "href": href,
-            "image": save_path,
+            "image": new_string[-1],
             "image_text_en": caption_text,
             "image_text_ru": translation_img,
         }

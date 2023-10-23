@@ -28,7 +28,18 @@ export const elasticApi = createApi({
         }
       })
     }),
+    postElasticDataBySearcWithDate: builder.mutation<any, {message: string, firstValue: any, secondValue: any}>({
+      query: ({message, firstValue, secondValue}) => ({
+        url: `/elasticsearch/search_by_date`,
+        method: "POST",
+        body: {
+          message: message,
+          begin: firstValue,
+          end: secondValue
+        }
+      })
+    }),
   }),
 });
 
-export const { usePostElasticDataBySearchMutation, useGetElasticDataQuery } = elasticApi;
+export const { usePostElasticDataBySearchMutation, usePostElasticDataBySearcWithDateMutation, useGetElasticDataQuery } = elasticApi;

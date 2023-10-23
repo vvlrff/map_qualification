@@ -25,14 +25,14 @@ const HomePage = () => {
         </div>
       </Link>
 
-      <Link to="/calendar" className={s.link}>
+      <div className={s.link}>
         <div className={s.lower_block}>
           <div className={s.text}>
-            Данные по временному промежутку
+            Собрать данные
           </div>
           <img src={calendarLogo} className={s.calendarLogo} alt="Логотип календаря"></img>
         </div>
-      </Link>
+      </div>
     </div>
   )
 }

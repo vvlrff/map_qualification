@@ -22,14 +22,12 @@ async def get_all_news_guardian(session: AsyncSession = Depends(get_async_sessio
     data = result.fetchall()
     answer = []
     for i in data:
-        new_string = i[4].split("\\")
-
         answer.append({
             'id': i[0],
             'title_en': i[1],
             'title_ru': i[2],
             'href': i[3],
-            'image': f"http://localhost:8000/photos/{new_string[-1]}",
+            'image': f"http://localhost:8000/photos/{i[4]}",
             'image_text_ru': i[6],
             'image_text_en': i[5],
             'country': i[7],
@@ -48,14 +46,12 @@ async def get_news_guardian_by_id(news_id: int, session: AsyncSession = Depends(
     result = await session.execute(stmt)
     data = result.fetchone()
 
-    new_string = data[4].split("\\")
-
     answer = {
         'id': data[0],
         'title_en': data[1],
         'title_ru': data[2],
         'href': data[3],
-        'image': f"http://localhost:8000/photos/{new_string[-1]}",
+        'image': f"http://localhost:8000/photos/{data[4]}",
         'image_text_ru': data[6],
         'image_text_en': data[5],
         'country': data[7],
@@ -81,14 +77,13 @@ async def get_news_guardian_by_dates(start_date: str, end_date: str, session: As
 
     answer = []
     for i in data:
-        new_string = i[4].split("\\")
 
         answer.append({
             'id': i[0],
             'title_en': i[1],
             'title_ru': i[2],
             'href': i[3],
-            'image': f"http://localhost:8000/photos/{new_string[-1]}",
+            'image': f"http://localhost:8000/photos/{i[4]}",
             'image_text_ru': i[6],
             'image_text_en': i[5],
             'country': i[7],

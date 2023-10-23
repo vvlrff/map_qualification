@@ -1,3 +1,7 @@
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Button } from '@mui/material';
 import { newsApi } from '../../services/newsApi';
 import { useState } from "react";
 import { elasticApi } from "../../services/elasticApi";
@@ -9,6 +13,8 @@ import s from './DataPage.module.scss'
 
 const DataPage = () => {
   const [message, setMessage] = useState<string>('');
+  const [firstValue, setFirstValue] = useState<any>([]);
+  const [secondValue, setSecondValue] = useState<any>([]);
 
   const {
     data: newsPostgres,
@@ -24,9 +30,21 @@ const DataPage = () => {
     }
   ] = elasticApi.usePostElasticDataBySearchMutation();
 
+  const [elasticMessageDate,
+    {
+      data: newsElasticDate,
+      error: elasticErrorDate,
+      isLoading: elasticLoadingDate
+    }
+  ] = elasticApi.usePostElasticDataBySearcWithDateMutation();
+
   const sendMessage = async () => {
-    await elasticMessage(message)
-  }
+    await elasticMessage(message);
+  };
+
+  const sendData = async () => {
+    await elasticMessageDate({message, firstValue, secondValue})
+  };
 
   return (
     <>
@@ -38,18 +56,57 @@ const DataPage = () => {
           onChange={(e) => setMessage(e.target.value)}
           type="text"
         />
-        <button className={s.button} onClick={() => sendMessage()}>Искать</button>
+        <button className={s.button} onClick={sendMessage}>Искать</button>
       </div>
+
+      <div className={s.dateContainer}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="От"
+            value={firstValue}
+            onChange={(newValue) => setFirstValue(newValue)}
+          />
+          <DatePicker
+            label="До"
+            value={secondValue}
+            onChange={(newValue) => setSecondValue(newValue)}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={sendData}
+          >
+            Искать
+          </Button>
+        </LocalizationProvider>
+      </div>
+
       <div className={s.container}>
         {newsElastic ? (
           <>
             {elasticError && <h1>Ошибка в эластике</h1>}
             {elasticLoading && <h1>Идет загрузка, подождите...</h1>}
-            {newsElastic?.map((item: INews) => {
+            {newsElastic.results?.map((item: INews) => {
               return (
                 <Link to={`/data/${item.id}`} className={s.link}>
                   <div key={item.id} className={s.item}>
                     <img src={item.image} alt="img" />
+                    <div className={s.title}>{item.title_ru}</div>
+                    <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
+                  </div>
+                </Link>
+              )
+            })}
+          </>
+        ) : newsElasticDate ? (
+          <>
+            {elasticErrorDate && <h1>Ошибка в БД</h1>}
+            {elasticLoadingDate && <h1>Идет загрузка, подождите...</h1>}
+            {newsElasticDate.results?.map((item: INews) => {
+              return (
+                <Link to={`/data/${item.id}`} className={s.link}>
+                  <div key={item.id} className={s.item}>
+                    <img className={s.img} src={item.image} alt="img" />
                     <div className={s.title}>{item.title_ru}</div>
                     <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
                   </div>
@@ -65,7 +122,7 @@ const DataPage = () => {
               return (
                 <Link to={`/data/${item.id}`} className={s.link}>
                   <div key={item.id} className={s.item}>
-                    <img src={item.image} alt="img" />
+                    <img className={s.img} src={item.image} alt="img" />
                     <div className={s.title}>{item.title_ru}</div>
                     <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
                   </div>
@@ -77,6 +134,7 @@ const DataPage = () => {
 
       </div >
     </>
-  )
-}
-export default DataPage
+  );
+};
+
+export default DataPage;
