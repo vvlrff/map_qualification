@@ -6,8 +6,7 @@ import { newsApi } from '../../services/newsApi';
 import { useState } from "react";
 import { elasticApi } from "../../services/elasticApi";
 import { INews } from "../../models/INews";
-import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
+import NewsItem from '../../components/NewsItem/NewsItem';
 import s from './DataPage.module.scss'
 
 
@@ -22,15 +21,13 @@ const DataPage = () => {
     isLoading: postgresLoading
   } = newsApi.useGetAllNewsQuery("");
 
-  const [elasticMessage,
-    {
-      data: newsElastic,
-      error: elasticError,
-      isLoading: elasticLoading
-    }
+  const [
+    elasticMessage,
+    { data: newsElastic, error: elasticError, isLoading: elasticLoading }
   ] = elasticApi.usePostElasticDataBySearchMutation();
 
-  const [elasticMessageDate,
+  const [
+    elasticMessageDate,
     {
       data: newsElasticDate,
       error: elasticErrorDate,
@@ -43,8 +40,20 @@ const DataPage = () => {
   };
 
   const sendData = async () => {
-    await elasticMessageDate({ message, firstValue, secondValue })
+    await elasticMessageDate({ message, firstValue, secondValue });
   };
+
+  const getNewsToRender = () => {
+    if (newsElastic) {
+      return { data: newsElastic, error: elasticError, loading: elasticLoading };
+    } else if (newsElasticDate) {
+      return { data: newsElasticDate, error: elasticErrorDate, loading: elasticLoadingDate };
+    } else {
+      return { data: newsPostgres, error: postgresError, loading: postgresLoading };
+    }
+  };
+
+  const { data, error, loading } = getNewsToRender();
 
   return (
     <>
@@ -56,89 +65,32 @@ const DataPage = () => {
           onChange={(e) => setMessage(e.target.value)}
           type="text"
         />
-        <button className={s.button} onClick={sendMessage}>Искать</button>
+        <button className={s.button} onClick={sendMessage}>
+          Искать
+        </button>
       </div>
 
       <div className={s.dateContainer}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="От"
-            value={firstValue}
-            onChange={(newValue) => setFirstValue(newValue)}
-          />
-          <DatePicker
-            label="До"
-            value={secondValue}
-            onChange={(newValue) => setSecondValue(newValue)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={sendData}
-          >
+          <DatePicker label="От" value={firstValue} onChange={(newValue) => setFirstValue(newValue)} />
+          <DatePicker label="До" value={secondValue} onChange={(newValue) => setSecondValue(newValue)} />
+          <Button variant="contained" color="primary" onClick={sendData}>
             Искать
           </Button>
         </LocalizationProvider>
       </div>
 
       <div className={s.container}>
-        {newsElastic ? (
+        {data ? (
           <>
-            {elasticError && <h1>Ошибка в эластике</h1>}
-            {elasticLoading && <h1>Идет загрузка, подождите...</h1>}
-            {newsElastic.results?.map((item: INews) => {
-              return (
-                <Link to={`/data/${item.id}`} className={s.link}>
-                  <div key={item.id} className={s.item}>
-                    <div className={s.imgContainer}>
-                      <img className={s.img} src={item.image} alt="img" />
-                    </div>
-                    <div className={s.title}>{item.title_ru}</div>
-                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
-                  </div>
-                </Link>
-              )
-            })}
+            {error && <h1>Ошибка</h1>}
+            {loading ? <h1>Идет загрузка, подождите...</h1> : null}
+            {data.result?.map((item: INews) => (
+              <NewsItem news={item} key={item.id} />
+            ))}
           </>
-        ) : newsElasticDate ? (
-          <>
-            {elasticErrorDate && <h1>Ошибка в БД</h1>}
-            {elasticLoadingDate && <h1>Идет загрузка, подождите...</h1>}
-            {newsElasticDate.results?.map((item: INews) => {
-              return (
-                <Link to={`/data/${item.id}`} className={s.link}>
-                  <div key={item.id} className={s.item}>
-                    <div className={s.imgContainer}>
-                      <img className={s.img} src={item.image} alt="img" />
-                    </div>
-                    <div className={s.title}>{item.title_ru}</div>
-                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
-                  </div>
-                </Link>
-              )
-            })}
-          </>
-        ) : (
-          <>
-            {postgresError && <h1>Ошибка в БД</h1>}
-            {postgresLoading && <h1>Идет загрузка, подождите...</h1>}
-            {newsPostgres?.map((item: INews) => {
-              return (
-                <Link to={`/data/${item.id}`} className={s.link}>
-                  <div key={item.id} className={s.item}>
-                    <div className={s.imgContainer}>
-                      <img className={s.img} src={item.image} alt="img" />
-                    </div>
-                    <div className={s.title}>{item.title_ru}</div>
-                    <div className={s.date}>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
-                  </div>
-                </Link>
-              )
-            })}
-          </>
-        )}
-
-      </div >
+        ) : null}
+      </div>
     </>
   );
 };

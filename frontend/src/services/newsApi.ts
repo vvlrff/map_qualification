@@ -15,13 +15,13 @@ export const newsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    collectNews: builder.mutation<INews[], string>({
+    collectNews: builder.mutation<any, string>({
       query: () => ({
         url: `/collection/collect_news`,
         method: "POST",
       })
     }),
-    getAllNews: builder.query<INews[], string>({
+    getAllNews: builder.query<any, string>({
       query: () => ({
         url: `/get/news_guardian`,
       })
@@ -31,7 +31,7 @@ export const newsApi = createApi({
         url: `/get/news_guardian/${id}`,
       })
     }),
-    getNewsByDate: builder.query<INews[], { start_date: string, end_date: string }>({
+    getNewsByDate: builder.query<any, { start_date: string, end_date: string }>({
       query: ({ start_date, end_date }) => ({
         url: `/get/news_guardian_${start_date}_${end_date}`,
       })

@@ -4,15 +4,14 @@ import mapLogo from '../../assets/images/icons8-google-карты.svg'
 import dataLogo from "../../assets/images/free-icon-database-storage-5655041.png"
 import calendarLogo from "../../assets/images/free-icon-calendar-2838764.png"
 import { newsApi } from "../../services/newsApi"
-import Loading from "../../components/Map/Loading"
 
 const HomePage = () => {
 
-  const [collect, { isLoading, isSuccess }] = newsApi.useCollectNewsMutation()
+  const [collect, { isLoading }] = newsApi.useCollectNewsMutation();
 
   const collectNews = async () => {
-    await collect('')
-  }
+    await collect('');
+  };
 
   return (
     <div>
@@ -62,13 +61,10 @@ const HomePage = () => {
             <img src={calendarLogo} className={s.calendarLogo} alt="Логотип календаря"></img>
           </div>
         </div>
-
-        {isSuccess && <div>Данные успешно загружены</div>}
-
       </div>
     </div >
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
 

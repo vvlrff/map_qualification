@@ -30,9 +30,11 @@ class LoadCountryTask {
 
     let response = await fetch(this.url);
 
-    let data: INews[] = await response.json();
+    let data = await response.json();
 
-    this.processData(data);
+    let newData = data.result
+
+    this.processData(newData);
   };
 
   processData = (newsCountries: INews[]) => {

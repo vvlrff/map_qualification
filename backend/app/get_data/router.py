@@ -35,7 +35,7 @@ async def get_all_news_guardian(session: AsyncSession = Depends(get_async_sessio
             'date': i[9],
         })
 
-    return answer
+    return {"result": answer}
 
 
 @router.get("/news_guardian/{news_id}")
@@ -91,4 +91,4 @@ async def get_news_guardian_by_dates(start_date: str, end_date: str, session: As
             'date': i[9],
         })
 
-    return answer
+    return {"result": answer}
