@@ -28,11 +28,9 @@ async def get_all_news_guardian(session: AsyncSession = Depends(get_async_sessio
             'title_ru': i[2],
             'href': i[3],
             'image': f"http://localhost:8000/photos/{i[4]}",
-            'image_text_ru': i[6],
-            'image_text_en': i[5],
-            'country': i[7],
-            'city': i[8],
-            'date': i[9],
+            'country': i[5],
+            'city': i[6],
+            'date': i[7],
         })
 
     return {"result": answer}
@@ -52,11 +50,9 @@ async def get_news_guardian_by_id(news_id: int, session: AsyncSession = Depends(
         'title_ru': data[2],
         'href': data[3],
         'image': f"http://localhost:8000/photos/{data[4]}",
-        'image_text_ru': data[6],
-        'image_text_en': data[5],
-        'country': data[7],
-        'city': data[8],
-        'date': data[9],
+        'country': data[5],
+        'city': data[6],
+        'date': data[7],
     }
 
     return answer
@@ -84,11 +80,9 @@ async def get_news_guardian_by_dates(start_date: str, end_date: str, session: As
             'title_ru': i[2],
             'href': i[3],
             'image': f"http://localhost:8000/photos/{i[4]}",
-            'image_text_ru': i[6],
-            'image_text_en': i[5],
-            'country': i[7],
-            'city': i[8],
-            'date': i[9],
+            'country': i[5],
+            'city': i[6],
+            'date': i[7],
         })
 
     return {"result": answer}

@@ -21,8 +21,6 @@ def answer_transformation(result):
             'href': el['_source']['href'],
             'date': el['_source']['date'],
             'image': f"http://localhost:8000/photos/{el['_source']['image']}",
-            'image_text_en': el['_source']['image_text_en'],
-            'image_text_ru': el['_source']['image_text_ru'],
             'country': el['_source']['country'],
             'city': el['_source']['city'],
             'relevant_score': el['_score'],
@@ -45,8 +43,6 @@ async def migration_from_db(session: AsyncSession = Depends(get_async_session)):
         news_title_ru = i[2]
         news_href = i[3]
         news_image = i[4]
-        news_image_text_en = i[5]
-        news_image_text_ru = i[6]
         news_country = i[7]
         news_city = i[8]
         news_date = i[9]
@@ -57,8 +53,6 @@ async def migration_from_db(session: AsyncSession = Depends(get_async_session)):
             'title_ru': news_title_ru,
             'href': news_href,
             'image': news_image,
-            'image_text_en': news_image_text_en,
-            'image_text_ru': news_image_text_ru,
             'country': news_country,
             'city': news_city,
             'date': news_date,

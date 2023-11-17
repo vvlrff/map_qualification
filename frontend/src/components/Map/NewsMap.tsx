@@ -1,5 +1,6 @@
 import { MapContainer as Map, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import type { GeoJsonObject } from 'geojson';
 import "./NewsMap.scss";
 
 interface CountryFeature {
@@ -12,7 +13,7 @@ interface CountryFeature {
 }
 
 interface NewsMapProps {
-  countries: CountryFeature[];
+  countries: GeoJsonObject;
 }
 
 const NewsMap: React.FC<NewsMapProps> = ({ countries }) => {
@@ -30,6 +31,7 @@ const NewsMap: React.FC<NewsMapProps> = ({ countries }) => {
   };
 
   const onEachCountry = (country: CountryFeature, layer: L.Layer) => {
+
     layer.options.fillColor = country.properties.color;
     const name = country.properties.ADMIN;
     const text = country.properties.text;

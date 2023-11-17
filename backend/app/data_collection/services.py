@@ -1,6 +1,6 @@
 import requests
 from app.data_collection.scrapper import get_news_theguardian
-from transformers import MarianMTModel, MarianTokenizer, BlipProcessor, BlipForConditionalGeneration
+from transformers import MarianMTModel, MarianTokenizer
 from PIL import Image
 import pandas as pd
 import spacy
@@ -18,10 +18,6 @@ model_pickle_path = os.path.join(current_directory, 'model_pickle')
 model_name_translator = "Helsinki-NLP/opus-mt-en-ru"
 model_translator = MarianMTModel.from_pretrained(model_name_translator)
 tokenizer_translator = MarianTokenizer.from_pretrained(model_name_translator)
-
-model_name_img_text = "Salesforce/blip-image-captioning-large"
-model_img_text = BlipForConditionalGeneration.from_pretrained(model_name_img_text)
-processor_img_text = BlipProcessor.from_pretrained(model_name_img_text)
 
 
 def dangerous_news_guardian():
@@ -93,18 +89,6 @@ def dangerous_news_guardian():
         else:
             print(f"Ошибка {file_name}")
 
-        image_path = save_path 
-
-        image_ = Image.open(image_path)
-        image_bytes = processor_img_text(images=image_, return_tensors="pt").pixel_values
-        caption = model_img_text.generate(image_bytes)
-        caption_text = processor_img_text.decode(caption[0], skip_special_tokens=True)
-
-        text_to_translate_img = caption_text
-        inputs_img = tokenizer_translator.encode(text_to_translate_img, return_tensors="pt")
-        translated_img = model_translator.generate(inputs_img)
-        translation_img = tokenizer_translator.decode(translated_img[0], skip_special_tokens=True)
-
         new_string = save_path.split("\\")
 
         item = {
@@ -113,8 +97,6 @@ def dangerous_news_guardian():
             "id": len(items),
             "href": href,
             "image": new_string[-1],
-            "image_text_en": caption_text,
-            "image_text_ru": translation_img,
         }
 
         doc = nlp(title)

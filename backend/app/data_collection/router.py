@@ -26,8 +26,6 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
         news_country = i["country"]
         news_city = i["city"]
         news_image = i["image"]
-        news_image_text_en = i["image_text_en"]
-        news_image_text_ru = i["image_text_ru"]
         news_date = datetime.today()
 
         query = select(news).where(news.c.title_en == news_title_en)
@@ -43,8 +41,6 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
                 city=news_city,
                 country=news_country,
                 image=news_image,
-                image_text_en=news_image_text_en,
-                image_text_ru=news_image_text_ru,
             )
             await session.execute(stmt)
             await session.commit()
@@ -56,8 +52,6 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
                 'country': news_country,
                 'city': news_city,
                 'image': news_image,
-                'image_text_en': news_image_text_en,
-                'image_text_ru': news_image_text_ru,
                 'date': datetime.today().isoformat()
             }
             await elastic_client.index(index='news', document=document)
