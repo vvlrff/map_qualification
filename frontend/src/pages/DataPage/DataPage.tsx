@@ -6,8 +6,8 @@ import { newsApi } from '../../services/newsApi';
 import { useState } from "react";
 import { elasticApi } from "../../services/elasticApi";
 import { INews } from "../../models/INews";
-import NewsItem from '../../components/NewsItem/NewsItem';
 import s from './DataPage.module.scss'
+import NewsItem from '../../components/NewsItem/NewsItem';
 
 
 const DataPage = () => {
@@ -16,18 +16,20 @@ const DataPage = () => {
   const [secondValue, setSecondValue] = useState<any>([]);
 
   const {
-    data: newsPostgres,
+    data: news,
     error: postgresError,
     isLoading: postgresLoading
   } = newsApi.useGetAllNewsQuery("");
 
-  const [
-    elasticMessage,
-    { data: newsElastic, error: elasticError, isLoading: elasticLoading }
+  const [elasticMessage,
+    {
+      data: newsElastic,
+      error: elasticError,
+      isLoading: elasticLoading
+    }
   ] = elasticApi.usePostElasticDataBySearchMutation();
 
-  const [
-    elasticMessageDate,
+  const [elasticMessageDate,
     {
       data: newsElasticDate,
       error: elasticErrorDate,
@@ -40,20 +42,13 @@ const DataPage = () => {
   };
 
   const sendData = async () => {
-    await elasticMessageDate({ message, firstValue, secondValue });
+    await elasticMessageDate({message, firstValue, secondValue})
   };
 
-  const getNewsToRender = () => {
-    if (newsElastic) {
-      return { data: newsElastic, error: elasticError, loading: elasticLoading };
-    } else if (newsElasticDate) {
-      return { data: newsElasticDate, error: elasticErrorDate, loading: elasticLoadingDate };
-    } else {
-      return { data: newsPostgres, error: postgresError, loading: postgresLoading };
-    }
-  };
+  console.log("News Elastic:", newsElastic);
+  console.log("News Elastic Date:", newsElasticDate);
+  console.log("News :", news);
 
-  const { data, error, loading } = getNewsToRender();
 
   return (
     <>
@@ -65,32 +60,65 @@ const DataPage = () => {
           onChange={(e) => setMessage(e.target.value)}
           type="text"
         />
-        <button className={s.button} onClick={sendMessage}>
-          Искать
-        </button>
+        <button className={s.button} onClick={sendMessage}>Искать</button>
       </div>
 
       <div className={s.dateContainer}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker label="От" value={firstValue} onChange={(newValue) => setFirstValue(newValue)} />
-          <DatePicker label="До" value={secondValue} onChange={(newValue) => setSecondValue(newValue)} />
-          <Button variant="contained" color="primary" onClick={sendData}>
+          <DatePicker
+            label="От"
+            value={firstValue}
+            onChange={(newValue) => setFirstValue(newValue)}
+          />
+          <DatePicker
+            label="До"
+            value={secondValue}
+            onChange={(newValue) => setSecondValue(newValue)}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={sendData}
+          >
             Искать
           </Button>
         </LocalizationProvider>
       </div>
 
       <div className={s.container}>
-        {data ? (
+        {newsElastic ? (
           <>
-            {error && <h1>Ошибка</h1>}
-            {loading ? <h1>Идет загрузка, подождите...</h1> : null}
-            {data.result?.map((item: INews) => (
-              <NewsItem news={item} key={item.id} />
-            ))}
+            {elasticError && <h1>Ошибка в эластике</h1>}
+            {elasticLoading && <h1>Идет загрузка, подождите...</h1>}
+            {newsElastic.results?.map((item: INews) => {
+              return (
+                <NewsItem news={item} key={item.id} />
+              )
+            })}
           </>
-        ) : null}
-      </div>
+        ) : newsElasticDate ? (
+          <>
+            {elasticErrorDate && <h1>Ошибка в БД</h1>}
+            {elasticLoadingDate && <h1>Идет загрузка, подождите...</h1>}
+            {newsElasticDate.results?.map((item: INews) => {
+              return (
+                <NewsItem news={item} key={item.id} />
+              )
+            })}
+          </>
+        ) : (
+          <>
+            {postgresError && <h1>Ошибка в БД</h1>}
+            {postgresLoading && <h1>Идет загрузка, подождите...</h1>}
+            {news?.result?.map((item: INews) => {
+              return (
+                <NewsItem news={item} key={item.id} />
+              )
+            })}
+          </>
+        )}
+
+      </div >
     </>
   );
 };

@@ -1,13 +1,9 @@
-FROM python:3.10
+FROM python:3.11.3
 
-RUN mkdir /fastapi_app
+WORKDIR /backend
 
-WORKDIR /fastapi_app
-
-COPY requirements.txt .
-
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
-
 RUN chmod a+x docker/*.sh

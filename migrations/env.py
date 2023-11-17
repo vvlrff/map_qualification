@@ -10,8 +10,8 @@ import sys
 
 sys.path.append(os.path.join(sys.path[0], 'app'))
 
-from app.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
-from app.data_collection.models import metadata as metadata_collect
+from backend.app.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
+from backend.app.data_collection.models import metadata as metadata_collect
 
 
 # this is the Alembic Config object, which provides
