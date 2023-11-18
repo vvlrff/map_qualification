@@ -1,18 +1,17 @@
 .container {
     margin-left: 7vw;
-    display: grid;
-    justify-items: center;
+    display: flex;
+    justify-content: space-around;
     align-items: center;
-    grid-template-columns: repeat(2, 45vw);
-    grid-template-rows: repeat(2, auto);
+    margin-top: 5vh;
 
-    .left_block {
+
+    .block {
         display: flex;
         background-color: #6bd0e2;
-        height: 40vh;
+        height: 80vh;
         width: 35vw;
         border-radius: 15px;
-        margin-top: 5%;
         justify-content: center;
         padding-top: 8%;
         padding-left: 10%;
@@ -21,101 +20,16 @@
         transition: transform 0.3s ease;
     }
 
-    .left_block:hover {
-        display: flex;
-        background-color: #6bd0e2;
-        height: 40vh;
-        width: 35vw;
-        border-radius: 15px;
-        margin-top: 5%;
-        justify-content: center;
-        padding-top: 8%;
-        padding-left: 10%;
-        overflow: hidden;
-        text-decoration: none;
+    .block:hover {
         transform: translateY(-5px);
     }
 
-    .right_block {
-        display: flex;
-        background-color: #e7d257;
-        height: 40vh;
-        width: 35vw;
-        border-radius: 15px;
-        margin-top: 5%;
-        justify-content: center;
-        padding-top: 8%;
-        padding-left: 10%;
-        overflow: hidden;
-        text-decoration: none;
-        transition: transform 0.3s ease;
-    }
-
-    .right_block:hover {
-        display: flex;
-        background-color: #e7d257;
-        height: 40vh;
-        width: 35vw;
-        border-radius: 15px;
-        margin-top: 5%;
-        justify-content: center;
-        padding-top: 8%;
-        padding-left: 10%;
-        overflow: hidden;
-        text-decoration: none;
-        transform: translateY(-5px);
-    }
-
-    .lower_block {
-        display: flex;
-        background-color: #6e6868;
-        height: 40vh;
-        width: 35vw;
-        border-radius: 15px;
-        margin-top: 5%;
-        justify-content: center;
-        padding-top: 8%;
-        padding-left: 10%;
-        overflow: hidden;
-        text-decoration: none;
-        transition: transform 0.3s ease
-    }
-
-    .lower_block:hover {
-        display: flex;
-        background-color: #6e6868;
-        height: 40vh;
-        width: 35vw;
-        border-radius: 15px;
-        margin-top: 5%;
-        justify-content: center;
-        padding-top: 8%;
-        padding-left: 10%;
-        overflow: hidden;
-        text-decoration: none;
-        transform: translateY(-5px);
-    }
-
-    .mapLogo {
-        position: relative;
-        left: 5vw;
-        top: 5vh;
-    }
-
-    .dataLogo {
-        position: relative;
-        left: 2vw;
-        top: 9vh;
-        width: 70%;
-        height: 80%;
-    }
-
-    .calendarLogo {
-        position: relative;
-        left: 2vw;
-        top: 9vh;
-        width: 70%;
-        height: 80%;
+    .logo {
+        // position: relative;
+        // left: 5vw;
+        // top: 5vh;
+        width: 20vw;
+        height: 20vh;
     }
 
     .text {
