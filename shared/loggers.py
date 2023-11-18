@@ -5,8 +5,6 @@ import pathlib
 
 
 logging.basicConfig(level=logging.NOTSET)
-logging.getLogger('telethon').setLevel(logging.WARNING)
-logging.getLogger('asyncio').setLevel(logging.WARNING)
 logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
 logging.getLogger('celery').setLevel(logging.WARNING)

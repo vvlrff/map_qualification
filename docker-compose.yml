@@ -1,29 +1,10 @@
 version: "3.9"
 
 services:
-  backend:
-    build: ./backend
-    command: [ "/bin/sh", "/backend/docker/app.sh" ]
-    ports:
-      - "8000:8000"
-    env_file:
-      - ./backend/.env
-    depends_on:
-      - db
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    env_file:
-      - ./backend/.env
-    ports:
-      - "8085:4000"
-    depends_on:
-      - db
-
   db:
     image: postgres:15
     env_file:
-      - .env
+      - .env.dev
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -34,24 +15,38 @@ services:
       timeout: 20s
       retries: 5
 
-  # redis:
-  #   image: "redis:6.2"
+  # rabbit:
+  #   image: rabbitmq:3-management
   #   expose:
-  #     - 6379
-  #   volumes:
-  #     - redis_data:/data
-  #   command: >
-  #     /bin/sh -c "
-  #     chmod 777 -R /data;
-  #     chmod 777 -R /etc;
-  #     redis-server
-  #     "
+  #     - 5672
+  #   ports:
+  #     - "15673:15672"
   #   healthcheck:
-  #     test: [ "CMD", "redis-cli","ping" ]
+  #     test: ["CMD", "rabbitmqctl", "status"]
   #     interval: 5s
   #     timeout: 20s
   #     retries: 5
 
+  mongo:
+    image: mongo:latest
+    expose:
+      - 27017
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=examplepassword
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    env_file:
+      - .env.dev
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+  
   alembic:
     build:
       context: .
@@ -71,7 +66,8 @@ services:
     ports:
       - "9200:9200"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   kibana:
     container_name: kb-container
@@ -83,28 +79,64 @@ services:
     ports:
       - "5601:5601"
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
+  parser:
+    build:
+      context: .
+      dockerfile: parser/Dockerfile
+    env_file:
+      - .env.dev
+    command: python3 /app/parser/collect.py
 
-  grafana:
-    image: grafana/grafana:latest
+  backend:
+    build: ./backend
+    command: [ "/bin/sh", "/backend/docker/app.sh" ]
     ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=vvlrff
-      - GF_SECURITY_ADMIN_PASSWORD=vvlrff
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
     depends_on:
       db:
         condition: service_healthy
 
+  # redis:
+  #   image: "redis:6.2"
+  #   expose:
+  #     - 6379
+  #   volumes:
+  #     - redis_data:/data
+  #   command: >
+  #     /bin/sh -c "
+  #     chmod 777 -R /data;
+  #     chmod 777 -R /etc;
+  #     redis-server
+  #     "
+  #   healthcheck:
+  #     test: [ "CMD", "redis-cli","ping" ]
+  #     interval: 5s
+  #     timeout: 20s
+  #     retries: 5
+
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=vvlrff
+  #     - GF_SECURITY_ADMIN_PASSWORD=vvlrff
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+
 volumes:
   postgres_data:
-  redis_data:
   mongo-data:
-  grafana_data:
+  # grafana_data:

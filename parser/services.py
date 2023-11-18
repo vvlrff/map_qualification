@@ -1,11 +1,11 @@
+import os
 import requests
-from bs4 import BeautifulSoup
-from transformers import MarianMTModel, MarianTokenizer
 import pandas as pd
 import numpy as np
 import spacy
 import pickle
-import os
+from bs4 import BeautifulSoup
+from transformers import MarianMTModel, MarianTokenizer
 import geonamescache
 
 nlp = spacy.load('en_core_web_lg')
@@ -19,92 +19,61 @@ model_translator = MarianMTModel.from_pretrained(model_name_translator)
 tokenizer_translator = MarianTokenizer.from_pretrained(model_name_translator)
 
 
-def get_news_theguardian():
-    url = 'https://www.theguardian.com/world'
-    headers = {
-        'Accept': '*/*',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.167 YaBrowser/22.7.3.799 Yowser/2.5 Safari/537.36'
-    }
+
+
+def get_guardian_news_items(url, headers):
+
     req = requests.get(url, headers=headers)
     src = req.text
     soup = BeautifulSoup(src, 'lxml')
-    items = []
-    allHrefs = soup.find_all(class_="dcr-lv2v9o")
-    allText = soup.find_all(class_="show-underline dcr-adlhb4")
-    allImage = soup.find_all(class_="dcr-evn1e9")
-    max_len = max(len(allHrefs), len(allText))
-    for i in range(max_len):
-        try:
-            itemText = allText[i].text
-            itemHref = allHrefs[i].get('href')
-            itemImage = allImage[i].get('src')
 
-            fullHref = "https://www.theguardian.com" + str(itemHref)
-            items.append(
-                {
-                    "title": itemText,
-                    "href": fullHref,
-                    "image": itemImage
-                }
-            )
-        except Exception:
-            print(Exception)
+    items = []
+
+    for href, text, image in zip(
+        soup.find_all(class_="dcr-lv2v9o"),
+        soup.find_all(class_="show-underline dcr-adlhb4"),
+        soup.find_all(class_="dcr-evn1e9")
+    ):
+        try:
+            item_text = text.text
+            item_href = href.get('href')
+            item_image = image.get('src')
+
+            full_href = f"https://www.theguardian.com{item_href}"
+            items.append({
+                "title": item_text,
+                "href": full_href,
+                "image": item_image
+            })
+        except Exception as e:
+            print(f"Error while processing item: {e}")
 
     return items
 
 
-def dangerous_news_guardian():
-    df = pd.DataFrame(get_news_theguardian())
-    preprocessing_text = []
+def preprocess_text(text):
+    doc = nlp(text)
+    return ' '.join(token.lemma_ for token in doc if not token.is_stop and not token.is_space and not token.is_punct)
 
-    for text in df['title']:
-        doc = nlp(text)
-        new_text = [
-            token.lemma_ for token in doc if not token.is_stop and not token.is_space and not token.is_punct]
-        preprocessing_text.append(' '.join(new_text))
 
-    df['preprocessing_text'] = preprocessing_text
+def dangerous_news_guardian(dataframe):
+    df = pd.DataFrame(dataframe)
+    df['preprocessing_text'] = df['title'].apply(preprocess_text)
     df['vector'] = df['preprocessing_text'].apply(
         lambda text: nlp(text).vector)
-    preprocessing_text = np.stack(df.vector)
+    preprocessing_text = np.stack(df['vector'])
 
     with open(model_pickle_path, 'rb') as file:
         rfc = pickle.load(file)
 
     y_pred = rfc.predict(preprocessing_text)
 
-    need_list = df[y_pred == 1]['title'].tolist()
-    image_list = df[y_pred == 1]['image'].tolist()
-    url_list = df[y_pred == 1]['href'].tolist()
+    relevant_items = df[y_pred == 1]
+    need_list = relevant_items['title'].tolist()
+    image_list = relevant_items['image'].tolist()
+    url_list = relevant_items['href'].tolist()
 
-    items = []
-
-    for title, image, href in zip(need_list, image_list, url_list):
-        items.append({
-            "title": title,
-            "id": len(items),
-            "href": href,
-            "image": image
-        })
-
-    countries = gc.get_countries_by_names()
-    cities = gc.get_cities()
-
-    def extract_names(var, key):
-        if isinstance(var, dict):
-            if key in var:
-                yield var[key]
-            for k, v in var.items():
-                if isinstance(v, (dict, list)):
-                    yield from extract_names(v, key)
-        elif isinstance(var, list):
-            for d in var:
-                yield from extract_names(d, key)
-
-    countries = list(extract_names(countries, 'name'))
-    cities = list(extract_names(cities, 'name'))
-
-    items = []
+    all_news_data = []
 
     for title, image, href in zip(need_list, image_list, url_list):
         text_to_translate = title
@@ -123,13 +92,13 @@ def dangerous_news_guardian():
         if response.status_code == 200:
             with open(save_path, "wb") as file:
                 file.write(response.content)
-            print(f"Изображение {file_name} успешно загружено")
+            print(f"Image {file_name} successfully downloaded")
         else:
-            print(f"Ошибка {file_name}")
+            print(f"Error downloading {file_name}")
 
         new_string = save_path.split("\\")
 
-        item = {
+        news_data = {
             "title_en": title,
             "title_ru": translation,
             "id": len(items),
@@ -137,27 +106,27 @@ def dangerous_news_guardian():
             "image": new_string[-1],
         }
 
-        doc = nlp(title)
         found_countries = []
         found_cities = []
-        for ent in doc.ents:
+
+        for ent in nlp(title).ents:
             if ent.label_ == 'GPE':
                 country_city_name = ent.text
-                if country_city_name in countries:
+                if country_city_name in gc.get_countries_by_names():
                     found_countries.append(country_city_name)
-                elif country_city_name not in cities:
+                elif country_city_name not in gc.get_cities():
                     if country_city_name == "US":
                         found_countries.append("United States of America")
                     elif country_city_name == "UK":
                         found_countries.append("United Kingdom")
                     else:
                         found_countries.append(country_city_name)
-                if country_city_name in cities:
+                if country_city_name in gc.get_cities():
                     found_cities.append(country_city_name)
 
-        item["country"] = found_countries
-        item["city"] = found_cities
-        items.append(item)
-        print(f"item{id}: {item}")
+        news_data["country"] = found_countries
+        news_data["city"] = found_cities
+        all_news_data.append(news_data)
+        print(f"News {news_data['id']}: {news_data}")
 
-    return items
+    return all_news_data
