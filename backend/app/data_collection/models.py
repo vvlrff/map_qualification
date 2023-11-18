@@ -11,9 +11,8 @@ news = Table(
     Column("title_ru", String, unique=True),
     Column("href", String),
     Column("image", String),
-    Column("image_text_en", String),
-    Column("image_text_ru", String),
     Column("country", ARRAY(String)),
     Column("city", ARRAY(String)),
+    Column("topical_keywords", ARRAY(String)),
     Column("date", TIMESTAMP, default=datetime.today().strftime('%d-%m-%Y'))
 )
