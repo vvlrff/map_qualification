@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, status, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.elastic import elastic_client
@@ -45,9 +45,9 @@ async def migration_from_db(session: AsyncSession = Depends(get_async_session)):
             news_title_ru = i[2]
             news_href = i[3]
             news_image = i[4]
-            news_topical_keywords = i[5]
-            news_country = i[6]
-            news_city = i[7]
+            news_country = i[5]
+            news_city = i[6]
+            news_topical_keywords = i[7]
             news_date = i[8]
 
             document = {
@@ -56,9 +56,9 @@ async def migration_from_db(session: AsyncSession = Depends(get_async_session)):
                 'title_ru': news_title_ru,
                 'href': news_href,
                 'image': news_image,
-                'topical_keywords': news_topical_keywords,
                 'country': news_country,
                 'city': news_city,
+                'topical_keywords': news_topical_keywords,
                 'date': news_date,
             }
 

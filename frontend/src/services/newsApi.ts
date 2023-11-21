@@ -15,12 +15,6 @@ export const newsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    collectNews: builder.mutation<any, string>({
-      query: () => ({
-        url: `/collection/collect_news`,
-        method: "POST",
-      })
-    }),
     getAllNews: builder.query<any, string>({
       query: () => ({
         url: `/get/news_guardian`,
@@ -51,4 +45,4 @@ export const newsApi = createApi({
   }),
 });
 
-export const { useCollectNewsMutation, useGetAllNewsQuery, useGetNewsByIdQuery, useGetNewsByDateQuery, useDeleteAllNewsMutation, useDeleteNewsByIdMutation } = newsApi;
+export const { useGetAllNewsQuery, useGetNewsByIdQuery, useGetNewsByDateQuery, useDeleteAllNewsMutation, useDeleteNewsByIdMutation } = newsApi;

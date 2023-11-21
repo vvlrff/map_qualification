@@ -2,21 +2,19 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import MyMap from '../../components/Map/MyMap';
 import { newsApi } from '../../services/newsApi';
-import NewsCard from '../../components/NewsCard/NewsCard';
-import s from './MapPage.module.scss';
 import { INews } from '../../models/INews';
+import EventPopup from '../../components/Popup/EventPopup';
+import s from './MapPage.module.scss';
+
 
 const MapPage: React.FC = () => {
+  const [selectedEvent, setSelectedEvent] = useState<INews | null>(null);
+
   const { data: news } = newsApi.useGetAllNewsQuery('');
-  const [selectedItem, setSelectedItem] = useState<any>(null);
 
-  const handleOpenCard = (item: any) => {
-    setSelectedItem(item);
-  };
-
-  const handleCloseCard = () => {
-    setSelectedItem(null);
-  };
+  const closeEventPopup = () => {
+    setSelectedEvent(null);
+};
 
   return (
     <div className={s.container}>
@@ -30,7 +28,7 @@ const MapPage: React.FC = () => {
                 <div
                   key={item.id}
                   className={s.item}
-                  onClick={() => handleOpenCard(item)}
+                  onClick={() => setSelectedEvent(item)}
                 >
                   <div className={s.title}>{item.title_ru}</div>
                   <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
@@ -39,33 +37,25 @@ const MapPage: React.FC = () => {
             })}
           </>
         ) : null}
-
-        {/* {
-          news?.map((item: INews) => {
-            return (
-              <div
-                key={item.id}
-                className={s.item}
-                onClick={() => handleOpenCard(item)}
-              >
-                <div className={s.title}>{item.title_ru}</div>
-                <div>Дата: {dayjs(item.date).format('DD-MM-YYYY')}</div>
-              </div>
-            );
-          })
-        } */}
       </div>
-
-
 
       <div className={s.map}>
         <MyMap />
       </div>
 
-      {selectedItem && (
-        <div className={s.overlay}>
-          <NewsCard item={selectedItem} onClose={handleCloseCard} />
-        </div>
+      {selectedEvent && (
+        <EventPopup
+          id={selectedEvent.id}
+          title_en={selectedEvent.title_en}
+          title_ru={selectedEvent.title_ru}
+          date={selectedEvent.date}
+          href={selectedEvent.href}
+          country={selectedEvent.country}
+          image={selectedEvent.image}
+          city={selectedEvent.city}
+          topical_keywords={selectedEvent.topical_keywords}
+          onClose={closeEventPopup}
+        />
       )}
 
     </div>

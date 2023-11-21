@@ -51,10 +51,6 @@ class LoadCountryTask {
       }
 
       country.properties.text = textData;
-      if (country.properties.ADMIN == "United States of America") {
-        console.log(country)
-      }
-
 
       this.setCountryColor(country);
     }
