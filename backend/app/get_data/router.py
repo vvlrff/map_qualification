@@ -1,5 +1,6 @@
+import logging
 from operator import and_
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
@@ -15,26 +16,31 @@ router = APIRouter(
 
 @router.get("/news_guardian")
 async def get_all_news_guardian(session: AsyncSession = Depends(get_async_session)):
+    try:
+        query = select(news)
+        result = await session.execute(query)
 
-    query = select(news)
-    result = await session.execute(query)
+        data = result.fetchall()
+        answer = []
+        for i in data:
+            answer.append({
+                'id': i[0],
+                'title_en': i[1],
+                'title_ru': i[2],
+                'href': i[3],
+                'image': f"http://localhost:8000/photos/{i[4]}",
+                'topical_keywords': i[5],
+                'country': i[6],
+                'city': i[7],
+                'date': i[8],
+            })
 
-    data = result.fetchall()
-    answer = []
-    for i in data:
-        answer.append({
-            'id': i[0],
-            'title_en': i[1],
-            'title_ru': i[2],
-            'href': i[3],
-            'image': f"http://localhost:8000/photos/{i[4]}",
-            'topical_keywords': i[5],
-            'country': i[6],
-            'city': i[7],
-            'date': i[8],
-        })
+        return {"status": status.HTTP_200_OK, "result": answer}
+    
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
+        return {"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_message": str(e)}
 
-    return {"result": answer}
 
 
 @router.get("/news_guardian/{news_id}")

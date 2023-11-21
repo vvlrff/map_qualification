@@ -26,13 +26,11 @@ tokenizer_translator = MarianTokenizer.from_pretrained(model_name_translator)
 def dangerous_news_guardian():
     df = pd.DataFrame(get_guardian_news_items())
 
-
-
     df['predicted_class'] = None
 
     # Пройдите по каждой строке в столбце "title"
     for index, row in df.iterrows():
-        text_to_classify = [row['title']]  # Создание списка из строки заголовка
+        text_to_classify = [row['title']] 
 
         # Токенизация и предсказание класса
         inputs = tokenizer(text_to_classify, return_tensors="pt")

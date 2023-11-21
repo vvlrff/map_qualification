@@ -2,12 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import logging
 
-# Настройка логгирования
-logging.basicConfig(filename='get_guardian_news.log', level=logging.DEBUG)
-
-# Настройка логгера
-logger = logging.getLogger(__name__)
-
 
 def get_guardian_news_items():
     url = 'https://www.theguardian.com/world'
@@ -39,7 +33,7 @@ def get_guardian_news_items():
                 "image": item_image
             })
         except Exception as e:
-            logger.error(f"Ошибка при обработке элемента: {e}")
+            logging.error(f"Ошибка при обработке элемента: {e}")
 
     return items
 
