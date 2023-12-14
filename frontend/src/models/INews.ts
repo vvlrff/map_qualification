@@ -5,8 +5,7 @@ export interface INews {
     date: string,
     href: string,
     image: string,
-    image_text_en: string,
-    image_text_ru: string,
     country: string[],
-    city: string[] 
+    city: string[],
+    topical_keywords: string[]
 };

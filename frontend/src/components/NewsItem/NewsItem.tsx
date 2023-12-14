@@ -15,8 +15,6 @@ const NewsItem = ({ news }: { news: INews }) => {
           <div className={s.textContainer}>
             <div className={s.title}>{news.title_ru}</div>
             <div className={s.text}>en: {news.title_en}</div>
-            <div className={s.text}>img_text_en: {news.image_text_en}</div>
-            <div className={s.text}>img_text_ru: {news.image_text_ru}</div>
             <div>Страны: {news.country.length > 1 ? (
               <span>
                 {news.country.map(country => (

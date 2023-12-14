@@ -38,7 +38,6 @@ class LoadCountryTask {
   };
 
   processData = (newsCountries: INews[]) => {
-    console.log("newsCountries", newsCountries);
     for (let i = 0; i < (countriesData as CountryData).features.length; i++) {
       const country = (countriesData as CountryData).features[i];
 
@@ -51,10 +50,6 @@ class LoadCountryTask {
       }
 
       country.properties.text = textData;
-      if (country.properties.ADMIN == "United States of America") {
-        console.log(country)
-      }
-
 
       this.setCountryColor(country);
     }

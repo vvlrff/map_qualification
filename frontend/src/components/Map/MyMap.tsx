@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Loading from "./Loading";
+
 import NewsMap from "./NewsMap";
 import LoadCountriesTask from "../../tasks/LoadCountriesTask";
 import Legend from "./Legend";
@@ -15,12 +15,12 @@ const MyMap = () => {
   useEffect(() => {
     setTimeout(load, 2)
   }, [countries]);
-  console.log(countries)
 
   return (
     <>
       {countries.length === 0 ? (
-        <Loading />
+        // <Loading />
+        <div>Идет загрузка</div>
       ) : (
         <>
           <NewsMap countries={countries} />

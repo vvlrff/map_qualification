@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+import logging
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,20 +15,31 @@ router = APIRouter(
 
 @router.delete("/news/{news_id}")
 async def delete_news_by_id(news_id: int, session: AsyncSession = Depends(get_async_session)):
-    stmt = delete(news).where(news.c.id == news_id)
+    try:
+        stmt = delete(news).where(news.c.id == news_id)
     
-    await session.execute(stmt)
-    await session.commit()
+        await session.execute(stmt)
+        await session.commit()
     
-    return {"message": f"Новость {news_id} удалена успешно"}
+        return {"status": status.HTTP_200_OK, "message": f"Новость {news_id} удалена успешно"}
+    
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
+        return {"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_message": str(e)}
+
+    
 
 @router.delete("/news")
 async def delete_all_news(session: AsyncSession = Depends(get_async_session)):
-    stmt = delete(news)
+    try:
+        stmt = delete(news)
+        
+        await session.execute(stmt)
+        await session.commit()
+        
+        return {"status": status.HTTP_200_OK, "message": "Таблица с новостями удалена успешно"}
     
-    await session.execute(stmt)
-    await session.commit()
-    
-    return {"message": "Таблица с новостями удалена успешно"}
-
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
+        return {"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_message": str(e)}
 

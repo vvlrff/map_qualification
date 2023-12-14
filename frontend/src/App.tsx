@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
+import Modal from 'react-modal';
 import Layout from "./components/Layout/Layout";
 import HomePage from './pages/HomePage/HomePage';
 import DataPage from './pages/DataPage/DataPage';
@@ -18,8 +20,13 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 
 function App() {
+
+  useEffect(() => {
+    Modal.setAppElement('#root');
+  }, []);
+
   return (
-      <RouterProvider router={router} />
+    <RouterProvider router={router} />
   )
 }
 
