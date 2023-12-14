@@ -12,8 +12,6 @@ import NewsItem from '../../components/NewsItem/NewsItem';
 
 const DataPage = () => {
   const [message, setMessage] = useState<string>('');
-  // const [firstValue, setFirstValue] = useState<any>([]);
-  // const [secondValue, setSecondValue] = useState<any>([]);
 
   const {
     data: news,
@@ -29,26 +27,13 @@ const DataPage = () => {
     }
   ] = elasticApi.usePostElasticDataBySearchMutation();
 
-  // const [elasticMessageDate,
-  //   {
-  //     data: newsElasticDate,
-  //     error: elasticErrorDate,
-  //     isLoading: elasticLoadingDate
-  //   }
-  // ] = elasticApi.usePostElasticDataBySearcWithDateMutation();
-
   const sendMessage = async () => {
     await elasticMessage(message);
   };
 
-  // const sendData = async () => {
-  //   await elasticMessageDate({message, firstValue, secondValue})
-  // };
 
   console.log("News Elastic:", newsElastic);
-  // console.log("News Elastic Date:", newsElasticDate);
   console.log("News :", news);
-
 
   return (
     <>

@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, status
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.elastic import elastic_client
+# from app.elastic import elastic_client
 from app.database import get_async_session
 from app.data_collection.models import news
 from app.data_collection.services import dangerous_news_guardian
@@ -17,7 +17,7 @@ router = APIRouter(
 @router.post("/collect_news")
 async def collect_news_guardian(session: AsyncSession = Depends(get_async_session)):
 
-    try:
+    # try:
         data = dangerous_news_guardian()
 
         for i in data:
@@ -48,20 +48,8 @@ async def collect_news_guardian(session: AsyncSession = Depends(get_async_sessio
                 await session.execute(stmt)
                 await session.commit()
 
-                document = {
-                    'title_en': news_title_en,
-                    'title_ru': news_title_ru,
-                    'href': news_href,
-                    'country': news_country,
-                    'city': news_city,
-                    'image': news_image,
-                    'topical_keywords': news_topical_keywords,
-                    'date': datetime.today().isoformat()
-                }
-                await elastic_client.index(index='news', document=document)
 
         return {"status": status.HTTP_200_OK, "result": data}
 
-    except Exception as e:
-        logging.error(f"Произошла ошибка: {e}")
-        return {"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_message": str(e)}
+    # except Exception as e:
+    #     return {"status": status.HTTP_500_INTERNAL_SERVER_ERROR, "error_message": str(e)}

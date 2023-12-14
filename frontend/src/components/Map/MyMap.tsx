@@ -15,7 +15,6 @@ const MyMap = () => {
   useEffect(() => {
     setTimeout(load, 2)
   }, [countries]);
-  console.log(countries)
 
   return (
     <>

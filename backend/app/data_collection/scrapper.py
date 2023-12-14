@@ -4,6 +4,7 @@ import logging
 
 
 def get_guardian_news_items():
+
     url = 'https://www.theguardian.com/world'
     headers = {
         'Accept': '*/*',
@@ -18,7 +19,7 @@ def get_guardian_news_items():
 
     for href, text, image in zip(
         soup.find_all(class_="dcr-lv2v9o"),
-        soup.find_all(class_="show-underline dcr-1r9ptb2"),
+        soup.find_all(class_="show-underline dcr-1ay6c8s"),
         soup.find_all(class_="dcr-evn1e9")
     ):
         try:

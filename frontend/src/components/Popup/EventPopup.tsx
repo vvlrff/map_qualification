@@ -33,8 +33,19 @@ const EventPopup: React.FC<NewsPopupProps> = ({ id, title_en, title_ru, date, hr
         <h3>{title_ru}</h3>
         <p>title_en: {title_en}</p>
         <p>href: {href}</p>
-        <p>country: {country}</p>
-        <p>city: {city}</p>
+
+        <img src={image} alt="img" />
+        <div>Страны: {country.length > 1 ? (
+          <span>
+            {country.map(country_item => (
+              <span> {country_item}</span>
+            ))}
+          </span>
+        ) : (
+          <span>
+            {country}
+          </span>
+        )}</div>
         <p>topical_keywords: {topical_keywords}</p>
         <p>date: {date.toLocaleString()}</p>
         <button onClick={onClose}>Закрыть</button>
