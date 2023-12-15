@@ -12,19 +12,19 @@ headers = {
 
 
 async def main():
-    logging.error('service initialized')
+    logging.error('Service initialized')
 
     while True:
-        logging.error('another cycle started')
+        logging.error('Another cycle started')
 
         try:
-            pars_data = get_guardian_news_items(url, headers=headers)
+            pars_data = await get_guardian_news_items(url, headers=headers)
             news = dangerous_news_guardian(pars_data)
 
             await save_to_mongo(news)
         except Exception as e:
             logging.error(f'Failed to save news to mongo, error: {e}')
-        
+
         await asyncio.sleep(30)
 
 if __name__ == "__main__":

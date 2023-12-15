@@ -31,7 +31,7 @@ def get_guardian_news_items(url, headers):
 
     for href, text, image in zip(
         soup.find_all(class_="dcr-lv2v9o"),
-        soup.find_all(class_="show-underline dcr-adlhb4"),
+        soup.find_all(class_="show-underline dcr-1ay6c8s"),
         soup.find_all(class_="dcr-evn1e9")
     ):
         try:
