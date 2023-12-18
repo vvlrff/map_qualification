@@ -25,18 +25,6 @@ class Base(DeclarativeBase):
     )
 
 
-class Intonation(Base):
-    __tablename__ = 'intonations'
-
-    id: Mapped[int] = mapped_column(
-        'id',
-        Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    intonation: Mapped[str] = mapped_column('intonation', String, unique=True)
-
-
 class News(Base):
     __tablename__ = 'news'
 
@@ -56,7 +44,7 @@ class News(Base):
     image: Mapped[str] = mapped_column('image', String)
     country: Mapped[list[str]] = mapped_column('country', ARRAY(String))
     city: Mapped[list[str]] = mapped_column('city', ARRAY(String))
-    sharps: Mapped[list[str]] = mapped_column('sharps', ARRAY(String))
+    topical_keywords: Mapped[list[str]] = mapped_column('sharps', ARRAY(String))
     date: Mapped[TIMESTAMP] = mapped_column(
         'date',
         TIMESTAMP,

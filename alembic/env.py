@@ -1,13 +1,10 @@
-import os
 from logging.config import fileConfig
-from shared.models import Base
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
-from backend.app.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
+from shared.dbs.postgresql import get_pg_uri
+from shared.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -27,14 +24,7 @@ target_metadata = Base.metadata
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
-username = os.getenv('POSTGRES_USER', 'postgres')
-password = os.getenv('POSTGRES_PASSWORD', 'vvlrff')
-host = os.getenv('DB_HOST', 'localhost')
-port = os.getenv('DB_PORT', '5432')
-db = os.getenv('POSTGRES_DB', 'new_db')
-
-url = f'postgresql://{username}:{password}@{host}:{port}/{db}'
-config.set_main_option("sqlalchemy.url", url)
+config.set_main_option("sqlalchemy.url", get_pg_uri(protocol='postgresql'))
 
 
 def run_migrations_offline() -> None:
@@ -71,8 +61,7 @@ def run_migrations_online() -> None:
     """
     print("****online")
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
-        prefix="sqlalchemy.",
+        config.get_section(config.config_ini_section, {}),
         poolclass=pool.NullPool,
     )
 

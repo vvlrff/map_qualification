@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.data_collection.router import router as router_collect
-from app.get_data.router import router as router_get
-from app.delete_data.router import router as router_delete
+from app.data.router import router as router_database
 from app.elasticsearch.router import router as router_elastic
 
 
@@ -28,7 +26,5 @@ app.add_middleware(
 )
 
 
-app.include_router(router_collect)
-app.include_router(router_get)
+app.include_router(router_database)
 app.include_router(router_elastic)
-app.include_router(router_delete)

@@ -1,9 +1,9 @@
-FROM python:3.11.3
-
-WORKDIR /backend
-
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-RUN chmod a+x docker/*.sh
+FROM python:3.11-slim-buster as backend
+COPY ../backend/requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+RUN apt-get update
+FROM backend
+COPY ../backend /app/backend
+COPY ../shared /app/shared
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+WORKDIR /app/backend

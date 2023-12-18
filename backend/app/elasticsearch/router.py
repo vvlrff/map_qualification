@@ -3,7 +3,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.elastic import elastic_client
 from app.database import get_async_session
-from app.data_collection.models import news
 from app.elasticsearch.schemas import InputUserMessage, InputUserMessageDate
 
 router = APIRouter(

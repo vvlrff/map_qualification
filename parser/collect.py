@@ -1,14 +1,7 @@
 import asyncio
 import logging
 from db_utils import save_to_mongo
-from services import dangerous_news_guardian, get_guardian_news_items
-
-
-url = 'https://www.theguardian.com/world'
-headers = {
-    'Accept': '*/*',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.167 YaBrowser/22.7.3.799 Yowser/2.5 Safari/537.36'
-}
+from services import dangerous_news_guardian
 
 
 async def main():
@@ -18,14 +11,15 @@ async def main():
         logging.error('Another cycle started')
 
         try:
-            pars_data = await get_guardian_news_items(url, headers=headers)
-            news = dangerous_news_guardian(pars_data)
+            news = dangerous_news_guardian()
 
-            await save_to_mongo(news)
+            # await save_to_mongo(news)
+
+            print(news)
         except Exception as e:
             logging.error(f'Failed to save news to mongo, error: {e}')
 
-        await asyncio.sleep(30)
+        await asyncio.sleep(1800)
 
 if __name__ == "__main__":
     asyncio.run(main())
