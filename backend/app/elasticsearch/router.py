@@ -18,6 +18,7 @@ def answer_transformation(result):
     elastic_answer = []
     for el in result:
         elastic_answer.append({
+            'id': el['_source']['id'],
             'title_en': el['_source']['title_en'],
             'title_ru': el['_source']['title_ru'],
             'href': el['_source']['href'],
@@ -120,7 +121,7 @@ async def migration_from_db(session: AsyncSession = Depends(get_async_session)):
             news_topical_keywords = i[7]
             news_date = i[8]
 
-            news_date = i[8].isoforббблобббоmat()
+            news_date = i[8].isoformat()
 
 
             document = {

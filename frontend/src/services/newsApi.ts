@@ -20,7 +20,7 @@ export const newsApi = createApi({
         url: `/get/news_guardian`,
       })
     }),
-    getNewsById: builder.query<INews, number>({
+    getNewsById: builder.query<any, number>({
       query: (id) => ({
         url: `/get/news_guardian/${id}`,
       })
