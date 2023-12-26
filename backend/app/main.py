@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.data.router import router as router_database
-from app.elasticsearch.router import router as router_elastic
+from backend.app.data.router import router as router_database
+from backend.app.elasticsearch.router import router as router_elastic
 
 
 app = FastAPI(
@@ -14,13 +14,13 @@ origins = [
     "http://localhost:5173",
 ]
 
-app.mount("/photos", StaticFiles(directory=r"app\photos"), name="photos")
+app.mount("/photos", StaticFiles(directory=r"parser\photos"), name="photos")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE"],
+    allow_methods=["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allow_headers=["Content-Type", "Access-Control-Allow-Headers",
                    "Access-Control-Allow-Origin", "Authorization"],
 )

@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.elastic import elastic_client
-from app.database import get_async_session
-from app.elasticsearch.schemas import InputUserMessage, InputUserMessageDate
+from shared.dbs.elastic import elastic_client
+from backend.app.database import get_async_session
+from backend.app.elasticsearch.schemas import InputUserMessage, InputUserMessageDate
+from backend.app.elasticsearch.models import news
 
 router = APIRouter(
     prefix="/elasticsearch",

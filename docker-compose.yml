@@ -34,6 +34,20 @@ services:
     networks:
       - my-network
 
+  mongo-express:
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_SERVER: "mongo"
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: examplepassword
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+
   pgadmin:
     image: dpage/pgadmin4:latest
     env_file:
@@ -57,32 +71,56 @@ services:
     networks:
       - my-network
 
-  elasticsearch:
-    container_name: es-container
+  node01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: node01
     environment:
-      - "discovery.type=single-node"
-    ports:
-      - "9200:9200"
-    depends_on:
-      - mongo
-      - db
+      - node.name=node01
+      - cluster.name=es-cluster-7
+      - discovery.seed_hosts=node01,node02
+      - cluster.initial_master_nodes=node01,node02
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+      - bootstrap.system_call_filter=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - es-data:/usr/share/elasticsearch/data
+      - es-data01:/usr/share/elasticsearch/data
+    networks:
+      - my-network
+
+  node02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: node02
+    environment:
+      - node.name=node02
+      - cluster.name=es-cluster-7
+      - discovery.seed_hosts=node01,node02
+      - cluster.initial_master_nodes=node01,node02
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+      - bootstrap.system_call_filter=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data02:/usr/share/elasticsearch/data
     networks:
       - my-network
 
   kibana:
-    container_name: kb-container
     image: docker.elastic.co/kibana/kibana:7.10.2
     environment:
-      - ELASTICSEARCH_HOSTS=http://es-container:9200
-    depends_on:
-      - elasticsearch
+      ELASTICSEARCH_HOSTS: '["http://node01:9200","http://node02:9200"]'
+      xpack.monitoring.ui.container.elasticsearch.enabled: true
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - my-network
+    depends_on:
+      - node01
+      - node02
 
   parser:
     build:
@@ -96,42 +134,33 @@ services:
     command: python3 /app/parser/collect.py
     networks:
       - my-network
-      
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - backend
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #   environment:
-  #     - GF_SECURITY_ADMIN_USER=vvlrff
-  #     - GF_SECURITY_ADMIN_PASSWORD=vvlrff
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    expose:
+      - 8000
+    ports:
+    - "8000:8000"
+    env_file:
+      - .env.dev
+    depends_on:
+      - db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    networks:
+      - my-network
 
 volumes:
   postgres_data:
   mongo-data:
   pgadmin_data:
   pgadmin_sessions:
-  es-data:
-    # grafana_data:
+  es-data01:
+    driver: local
+  es-data02:
+    driver: local
+
 
 networks:
   my-network:

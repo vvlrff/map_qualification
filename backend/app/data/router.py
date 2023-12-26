@@ -3,8 +3,8 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from operator import and_
 from datetime import datetime
-
-from app.database import get_async_session
+from backend.app.data.models import news
+from backend.app.database import get_async_session
 
 
 router = APIRouter(

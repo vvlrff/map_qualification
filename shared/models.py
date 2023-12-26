@@ -44,10 +44,9 @@ class News(Base):
     image: Mapped[str] = mapped_column('image', String)
     country: Mapped[list[str]] = mapped_column('country', ARRAY(String))
     city: Mapped[list[str]] = mapped_column('city', ARRAY(String))
-    topical_keywords: Mapped[list[str]] = mapped_column('sharps', ARRAY(String))
+    topical_keywords: Mapped[list[str]] = mapped_column('topical_keywords', ARRAY(String))
     date: Mapped[TIMESTAMP] = mapped_column(
         'date',
         TIMESTAMP,
-        server_default=func.now(),
         nullable=False
     )

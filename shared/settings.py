@@ -7,7 +7,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from envparse import env
 
-load_dotenv(env('DOTENV_FILE', default=None))
+load_dotenv(env('DOTENV_FILE', default='.env.dev'))
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +40,7 @@ RABBITMQ_URI_QUERY = env('RABBIT_URI_QUERY', default=str())
 
 # parser
 MONGO_PARSER_DB_NAME = env('MONGO_PARSER_DB')
-MONGO_PARSER_CHANNELS_COLLECTION = env('MONGO_PARSER_CHANNELS_COLLECTION')
+MONGO_PARSER_NEWS_COLLECTION = env('MONGO_PARSER_NEWS_COLLECTION')
 PARSER_RABBITMQ_QUEUE_NAME = env('RABBIT_PARSER_QUEUE', default='parser')
 PARSER_MIN_WORD_COUNT = env.int('PARSER_MIN_WORD_COUNT', default=5)
 
@@ -48,7 +48,5 @@ PARSER_MIN_WORD_COUNT = env.int('PARSER_MIN_WORD_COUNT', default=5)
 ELASTIC_PORT=env('ELASTIC_HOST', default=9200)
 ELASTIC_NODE_01=env('ELASTIC_NODE_01')
 ELASTIC_NODE_02=env('ELASTIC_NODE_02')
-ELASTIC_NODE_03=env('ELASTIC_NODE_03')
 
-SENTRY_API_VERSION = env.int('SENTRY_API_VERSION', default=3)
 
