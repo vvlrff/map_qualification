@@ -9,6 +9,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - my-network
 
   rabbit:
     image: rabbitmq:3-management
@@ -16,6 +18,9 @@ services:
       - 5672
     ports:
       - "15673:15672"
+      - "5672:5672"
+    networks:
+      - my-network
 
   mongo:
     image: mongo:latest
@@ -26,6 +31,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=examplepassword
+    networks:
+      - my-network
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -35,7 +42,9 @@ services:
       - "8080:80"
     depends_on:
       - db
-  
+    networks:
+      - my-network
+
   alembic:
     build:
       context: .
@@ -45,27 +54,35 @@ services:
     depends_on:
       - db
     command: alembic upgrade head
+    networks:
+      - my-network
 
-  # elasticsearch:
-  #   container_name: es-container
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-  #   environment:
-  #     - "discovery.type=single-node"
-  #   ports:
-  #     - "9200:9200"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  elasticsearch:
+    container_name: es-container
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    environment:
+      - "discovery.type=single-node"
+    ports:
+      - "9200:9200"
+    depends_on:
+      - mongo
+      - db
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    networks:
+      - my-network
 
-  # kibana:
-  #   container_name: kb-container
-  #   image: docker.elastic.co/kibana/kibana:7.10.2
-  #   environment:
-  #     - ELASTICSEARCH_HOSTS=http://es-container:9200
-  #   depends_on:
-  #     - elasticsearch
-  #   ports:
-  #     - "5601:5601"
+  kibana:
+    container_name: kb-container
+    image: docker.elastic.co/kibana/kibana:7.10.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es-container:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - my-network
 
   parser:
     build:
@@ -77,7 +94,9 @@ services:
       - mongo
       - db
     command: python3 /app/parser/collect.py
-
+    networks:
+      - my-network
+      
   # backend:
   #   build: ./backend
   #   ports:
@@ -109,4 +128,11 @@ services:
 volumes:
   postgres_data:
   mongo-data:
-  # grafana_data:
+  pgadmin_data:
+  pgadmin_sessions:
+  es-data:
+    # grafana_data:
+
+networks:
+  my-network:
+    driver: bridge
