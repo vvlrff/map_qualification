@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from envparse import env
 
 load_dotenv(env('DOTENV_FILE', default='.env.dev'))
-
+# load_dotenv(env('DOTENV_FILE', default='.env'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

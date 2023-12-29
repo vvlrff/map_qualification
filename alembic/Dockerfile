@@ -1,7 +1,10 @@
 FROM python:3.11-slim-buster as alembic_base
 COPY alembic/requirements.txt /app/alembic/requirements.txt
 COPY shared/requirements.txt /app/shared/requirements.txt
+
+RUN apt update && apt install -y git
 RUN pip install -r /app/alembic/requirements.txt
+RUN apt remove -y git && apt autoremove -y
 
 FROM alembic_base
 COPY ../shared /app/shared

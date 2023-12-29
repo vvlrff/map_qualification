@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:15
     env_file:
-      - .env.dev
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -51,7 +51,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     env_file:
-      - .env.dev
+      - .env
     ports:
       - "8080:80"
     depends_on:
@@ -64,70 +64,70 @@ services:
       context: .
       dockerfile: alembic/Dockerfile
     env_file:
-      - .env.dev
+      - .env
     depends_on:
       - db
     command: alembic upgrade head
     networks:
       - my-network
 
-  node01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    container_name: node01
-    environment:
-      - node.name=node01
-      - cluster.name=es-cluster-7
-      - discovery.seed_hosts=node01,node02
-      - cluster.initial_master_nodes=node01,node02
-      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
-      - bootstrap.system_call_filter=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es-data01:/usr/share/elasticsearch/data
-    networks:
-      - my-network
+  # node01:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+  #   container_name: node01
+  #   environment:
+  #     - node.name=node01
+  #     - cluster.name=es-cluster-7
+  #     - discovery.seed_hosts=node01,node02
+  #     - cluster.initial_master_nodes=node01,node02
+  #     - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+  #     - bootstrap.system_call_filter=false
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - es-data01:/usr/share/elasticsearch/data
+  #   networks:
+  #     - my-network
 
-  node02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    container_name: node02
-    environment:
-      - node.name=node02
-      - cluster.name=es-cluster-7
-      - discovery.seed_hosts=node01,node02
-      - cluster.initial_master_nodes=node01,node02
-      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
-      - bootstrap.system_call_filter=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es-data02:/usr/share/elasticsearch/data
-    networks:
-      - my-network
+  # node02:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+  #   container_name: node02
+  #   environment:
+  #     - node.name=node02
+  #     - cluster.name=es-cluster-7
+  #     - discovery.seed_hosts=node01,node02
+  #     - cluster.initial_master_nodes=node01,node02
+  #     - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+  #     - bootstrap.system_call_filter=false
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - es-data02:/usr/share/elasticsearch/data
+  #   networks:
+  #     - my-network
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.10.2
-    environment:
-      ELASTICSEARCH_HOSTS: '["http://node01:9200","http://node02:9200"]'
-      xpack.monitoring.ui.container.elasticsearch.enabled: true
-    ports:
-      - 5601:5601
-    networks:
-      - my-network
-    depends_on:
-      - node01
-      - node02
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.10.2
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: '["http://node01:9200","http://node02:9200"]'
+  #     xpack.monitoring.ui.container.elasticsearch.enabled: true
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - node01
+  #     - node02
 
   parser:
     build:
       context: .
       dockerfile: parser/Dockerfile
     env_file:
-      - .env.dev
+      - .env
     depends_on:
       - mongo
       - db
@@ -144,7 +144,7 @@ services:
     ports:
     - "8000:8000"
     env_file:
-      - .env.dev
+      - .env
     depends_on:
       - db
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -156,10 +156,10 @@ volumes:
   mongo-data:
   pgadmin_data:
   pgadmin_sessions:
-  es-data01:
-    driver: local
-  es-data02:
-    driver: local
+  # es-data01:
+  #   driver: local
+  # es-data02:
+  #   driver: local
 
 
 networks:
